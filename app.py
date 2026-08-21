@@ -1,4 +1,5 @@
 import os
+import asyncio
 
 from flask import Flask, request, jsonify
 from telegram import Update
@@ -44,6 +45,12 @@ async def webhook():
         data,
         application.bot
     )
+
+    if not application.initialized:
+        await application.initialize()
+
+    if not application.running:
+        await application.start()
 
     await application.process_update(update)
 
