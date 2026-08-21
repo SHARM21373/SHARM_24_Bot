@@ -3,20 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHARM Tap</title>
-    <link rel="stylesheet" href="style.css">
+
+    <title>SHARM Mining</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: #0b0f19;
+            color: white;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 420px;
+            text-align: center;
+            padding: 30px 22px;
+        }
+
+        .logo {
+            font-size: 52px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .subtitle {
+            margin-top: 8px;
+            color: #9ca3af;
+            font-size: 15px;
+        }
+
+        .card {
+            margin-top: 30px;
+            padding: 25px 20px;
+            border-radius: 18px;
+            background: #151b29;
+            border: 1px solid #252d3d;
+        }
+
+        .label {
+            display: block;
+            text-align: left;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #cbd5e1;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #374151;
+            outline: none;
+            background: #0b0f19;
+            color: white;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #6d7cff;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 18px;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #5865f2;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #message {
+            margin-top: 18px;
+            min-height: 22px;
+            font-size: 14px;
+        }
+
+        .support {
+            margin-top: 20px;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>🪙 SHARM TAP</h1>
+    <div class="container">
 
-    <div class="score">
-        SHARM: <span id="score">0</span>
+        <div class="logo">⛏️</div>
+
+        <h1>SHARM Mining</h1>
+
+        <div class="subtitle">
+            Welcome to SHARM Mining
+        </div>
+
+        <div class="card">
+
+            <label class="label" for="token">
+                Enter your access token
+            </label>
+
+            <input
+                id="token"
+                type="text"
+                placeholder="SHARM-XXXX-XXXX"
+                autocomplete="off"
+            >
+
+            <button onclick="verifyToken()">
+                🔐 Verify Token
+            </button>
+
+            <div id="message"></div>
+
+        </div>
+
+        <div class="support">
+            Don't have a token? Contact Support
+        </div>
+
     </div>
 
-    <button id="tapBtn">🪙 TAP</button>
+    <script>
+        function verifyToken() {
 
-    <script src="script.js"></script>
+            const token = document
+                .getElementById("token")
+                .value
+                .trim();
+
+            const message = document.getElementById("message");
+
+            if (!token) {
+                message.textContent = "⚠️ Please enter your token.";
+                return;
+            }
+
+            message.textContent = "🔄 Checking token...";
+
+            // এখন শুধু UI পরীক্ষা হচ্ছে।
+            // আসল token verification পরের ধাপে যুক্ত হবে।
+
+            setTimeout(() => {
+                message.textContent =
+                    "ℹ️ Token verification will be connected soon.";
+            }, 700);
+        }
+    </script>
 
 </body>
 </html>
