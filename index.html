@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>SHARM Mining</title>
 
@@ -14,24 +17,28 @@
         body {
             margin: 0;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             font-family: Arial, sans-serif;
             background: #0b0f19;
             color: white;
         }
 
+        .screen {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+
         .container {
-            width: 92%;
+            width: 100%;
             max-width: 420px;
             text-align: center;
-            padding: 30px 22px;
         }
 
         .logo {
-            font-size: 52px;
-            margin-bottom: 10px;
+            font-size: 58px;
+            margin-bottom: 8px;
         }
 
         h1 {
@@ -46,7 +53,7 @@
         }
 
         .card {
-            margin-top: 30px;
+            margin-top: 28px;
             padding: 25px 20px;
             border-radius: 18px;
             background: #151b29;
@@ -57,8 +64,8 @@
             display: block;
             text-align: left;
             margin-bottom: 10px;
-            font-size: 14px;
             color: #cbd5e1;
+            font-size: 14px;
         }
 
         input {
@@ -73,7 +80,7 @@
         }
 
         input:focus {
-            border-color: #6d7cff;
+            border-color: #5865f2;
         }
 
         button {
@@ -93,6 +100,10 @@
             transform: scale(0.98);
         }
 
+        .secondary-button {
+            background: #252d3d;
+        }
+
         #message {
             margin-top: 18px;
             min-height: 22px;
@@ -104,73 +115,467 @@
             color: #9ca3af;
             font-size: 13px;
         }
+
+        /* Mining Screen */
+
+        .mining-screen {
+            min-height: 100vh;
+            padding: 25px 18px;
+        }
+
+        .mining-container {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logout {
+            width: auto;
+            margin: 0;
+            padding: 9px 14px;
+            font-size: 13px;
+            background: #252d3d;
+        }
+
+        .balance-card {
+            padding: 28px 20px;
+            border-radius: 20px;
+            background: #151b29;
+            border: 1px solid #252d3d;
+        }
+
+        .balance-title {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        #score {
+            margin: 12px 0;
+            font-size: 42px;
+            font-weight: bold;
+        }
+
+        .coin-name {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .tap-area {
+            margin-top: 30px;
+        }
+
+        #tapBtn {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background: #5865f2;
+            border: 8px solid #252d3d;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        #tapBtn:active {
+            transform: scale(0.94);
+        }
+
+        .tap-info {
+            margin-top: 18px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .success {
+            color: #4ade80;
+        }
+
+        .error {
+            color: #f87171;
+        }
+
+        .info {
+            color: #60a5fa;
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
+    <!-- =========================
+         TOKEN SCREEN
+    ========================== -->
 
-        <div class="logo">⛏️</div>
+    <section id="tokenScreen" class="screen">
 
-        <h1>SHARM Mining</h1>
+        <div class="container">
 
-        <div class="subtitle">
-            Welcome to SHARM Mining
+            <div class="logo">⛏️</div>
+
+            <h1>SHARM Mining</h1>
+
+            <div class="subtitle">
+                Welcome to SHARM Mining
+            </div>
+
+            <div class="card">
+
+                <label class="label" for="tokenInput">
+                    Enter your access token
+                </label>
+
+                <input
+                    id="tokenInput"
+                    type="text"
+                    placeholder="SHARM-XXXX-XXXX"
+                    autocomplete="off"
+                    maxlength="40"
+                >
+
+                <button id="verifyBtn">
+                    🔐 Verify Token
+                </button>
+
+                <div id="message"></div>
+
+            </div>
+
+            <div class="support">
+                Don't have a token? Contact Support
+            </div>
+
         </div>
 
-        <div class="card">
+    </section>
 
-            <label class="label" for="token">
-                Enter your access token
-            </label>
 
-            <input
-                id="token"
-                type="text"
-                placeholder="SHARM-XXXX-XXXX"
-                autocomplete="off"
-            >
+    <!-- =========================
+         MINING SCREEN
+    ========================== -->
 
-            <button onclick="verifyToken()">
-                🔐 Verify Token
-            </button>
+    <section id="miningScreen" class="mining-screen hidden">
 
-            <div id="message"></div>
+        <div class="mining-container">
+
+            <div class="topbar">
+
+                <div class="brand">
+                    ⛏️ SHARM Mining
+                </div>
+
+                <button
+                    id="logoutBtn"
+                    class="logout"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+
+            <div class="balance-card">
+
+                <div class="balance-title">
+                    Your SHARM Balance
+                </div>
+
+                <div id="score">
+                    0
+                </div>
+
+                <div class="coin-name">
+                    SHARM
+                </div>
+
+            </div>
+
+
+            <div class="tap-area">
+
+                <button id="tapBtn">
+                    ⛏️ TAP
+                </button>
+
+                <div class="tap-info">
+                    Tap to mine SHARM
+                </div>
+
+            </div>
 
         </div>
 
-        <div class="support">
-            Don't have a token? Contact Support
-        </div>
+    </section>
 
-    </div>
 
     <script>
+
+        /* =========================
+           STORAGE KEYS
+        ========================== */
+
+        const TOKEN_KEY = "sharmAccessToken";
+        const BALANCE_KEY = "sharmBalance";
+
+
+        /* =========================
+           ELEMENTS
+        ========================== */
+
+        const tokenScreen =
+            document.getElementById("tokenScreen");
+
+        const miningScreen =
+            document.getElementById("miningScreen");
+
+        const tokenInput =
+            document.getElementById("tokenInput");
+
+        const verifyBtn =
+            document.getElementById("verifyBtn");
+
+        const message =
+            document.getElementById("message");
+
+        const scoreDisplay =
+            document.getElementById("score");
+
+        const tapBtn =
+            document.getElementById("tapBtn");
+
+        const logoutBtn =
+            document.getElementById("logoutBtn");
+
+
+        /* =========================
+           SHOW MINING SCREEN
+        ========================== */
+
+        function showMiningScreen() {
+
+            tokenScreen.classList.add("hidden");
+            miningScreen.classList.remove("hidden");
+
+            updateScore();
+        }
+
+
+        /* =========================
+           SHOW TOKEN SCREEN
+        ========================== */
+
+        function showTokenScreen() {
+
+            miningScreen.classList.add("hidden");
+            tokenScreen.classList.remove("hidden");
+
+            tokenInput.value = "";
+            message.textContent = "";
+            message.className = "";
+        }
+
+
+        /* =========================
+           UPDATE BALANCE
+        ========================== */
+
+        function updateScore() {
+
+            const score =
+                Number(localStorage.getItem(BALANCE_KEY)) || 0;
+
+            scoreDisplay.textContent =
+                score.toLocaleString();
+        }
+
+
+        /* =========================
+           TOKEN VERIFICATION
+        ========================== */
+
         function verifyToken() {
 
-            const token = document
-                .getElementById("token")
-                .value
-                .trim();
-
-            const message = document.getElementById("message");
+            const token =
+                tokenInput.value.trim();
 
             if (!token) {
-                message.textContent = "⚠️ Please enter your token.";
+
+                message.textContent =
+                    "⚠️ Please enter your token.";
+
+                message.className = "error";
+
                 return;
             }
 
-            message.textContent = "🔄 Checking token...";
 
-            // এখন শুধু UI পরীক্ষা হচ্ছে।
-            // আসল token verification পরের ধাপে যুক্ত হবে।
+            message.textContent =
+                "🔄 Checking token...";
 
-            setTimeout(() => {
-                message.textContent =
-                    "ℹ️ Token verification will be connected soon.";
+            message.className = "info";
+
+            verifyBtn.disabled = true;
+
+
+            /*
+             * DEMO VERIFICATION
+             *
+             * This currently checks only the token format.
+             *
+             * Real customer-token verification
+             * will be connected to the backend later.
+             */
+
+            setTimeout(function () {
+
+                const tokenPattern =
+                    /^SHARM-[A-Z0-9]{4}-[A-Z0-9]{4}$/i;
+
+
+                if (tokenPattern.test(token)) {
+
+                    localStorage.setItem(
+                        TOKEN_KEY,
+                        token
+                    );
+
+                    message.textContent =
+                        "✅ Token verified successfully!";
+
+                    message.className = "success";
+
+                    setTimeout(function () {
+
+                        showMiningScreen();
+
+                    }, 500);
+
+                } else {
+
+                    message.textContent =
+                        "❌ Invalid token format.";
+
+                    message.className = "error";
+
+                    verifyBtn.disabled = false;
+                }
+
             }, 700);
         }
+
+
+        /* =========================
+           TAP MINING
+        ========================== */
+
+        tapBtn.addEventListener(
+            "click",
+            function () {
+
+                let score =
+                    Number(
+                        localStorage.getItem(BALANCE_KEY)
+                    ) || 0;
+
+                score += 1;
+
+                localStorage.setItem(
+                    BALANCE_KEY,
+                    score
+                );
+
+                updateScore();
+            }
+        );
+
+
+        /* =========================
+           VERIFY BUTTON
+        ========================== */
+
+        verifyBtn.addEventListener(
+            "click",
+            verifyToken
+        );
+
+
+        /* =========================
+           ENTER KEY
+        ========================== */
+
+        tokenInput.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (event.key === "Enter") {
+                    verifyToken();
+                }
+
+            }
+        );
+
+
+        /* =========================
+           LOGOUT
+        ========================== */
+
+        logoutBtn.addEventListener(
+            "click",
+            function () {
+
+                localStorage.removeItem(
+                    TOKEN_KEY
+                );
+
+                showTokenScreen();
+            }
+        );
+
+
+        /* =========================
+           INITIAL APP LOAD
+        ========================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const savedToken =
+                    localStorage.getItem(TOKEN_KEY);
+
+                if (savedToken) {
+
+                    showMiningScreen();
+
+                } else {
+
+                    showTokenScreen();
+
+                }
+
+            }
+        );
+
     </script>
 
 </body>
