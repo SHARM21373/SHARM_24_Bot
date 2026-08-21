@@ -1,14 +1,20 @@
+import os
+
 from flask import Flask, request, jsonify
+from telegram import Update
 
 from database import init_db
+from routes import routes
 from bot import application
+
 
 app = Flask(__name__)
 
 init_db()
+app.register_blueprint(routes)
 
 
-@app.route("/")
+@app.get("/")
 def home():
     return jsonify({
         "status": "online",
@@ -17,7 +23,7 @@ def home():
     })
 
 
-@app.route("/health")
+@app.get("/health")
 def health():
     return jsonify({
         "success": True
@@ -26,12 +32,20 @@ def health():
 
 @app.post("/webhook")
 async def webhook():
-    data = request.get_json(force=True)
+    data = request.get_json(silent=True)
 
-    await application.initialize()
+    if not data:
+        return jsonify({
+            "success": False,
+            "error": "Invalid Telegram update"
+        }), 400
 
-    update = application.update_queue
-    # এখানে পরের ধাপে Telegram Update প্রসেসিং যোগ হবে
+    update = Update.de_json(
+        data,
+        application.bot
+    )
+
+    await application.process_update(update)
 
     return jsonify({
         "success": True
@@ -39,4 +53,9 @@ async def webhook():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+
+    app.run(
+        host="0.0.0.0",
+        port=port
+    )
