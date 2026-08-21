@@ -1,21 +1,22 @@
-SHARM_24_Bot/
-│
-├── index.html          # Mini App UI
-├── style.css           # ডিজাইন
-├── script.js           # Tap, Energy, Daily Reward
-├── bot.py              # Telegram Bot
-├── requirements.txt    # Python লাইব্রেরি
-├── README.md
-│
-├── api/
-│   ├── app.py          # Backend API
-│   ├── database.py     # Database
-│   └── routes.py
-│
-├── data/
-│   └── sharm.db        # Database (শুরুতে SQLite)
-│
-└── assets/
-    ├── coin.png
-    ├── logo.png
-    └── background.png
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return jsonify({
+        "status": "online",
+        "app": "SHARM TAP",
+        "version": "1.0.0",
+        "message": "Backend is running successfully!"
+    })
+
+@app.route("/health")
+def health():
+    return jsonify({
+        "success": True,
+        "message": "Server is healthy"
+    })
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
