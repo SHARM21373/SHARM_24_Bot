@@ -1,15 +1,13 @@
-import sqlite3
 import os
+import sqlite3
 
-DATABASE = os.path.join(
-    os.path.dirname(__file__),
-    "data",
-    "sharm.db"
-)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+DATABASE = os.path.join(DATA_DIR, "sharm.db")
 
 
 def get_connection():
-    os.makedirs(os.path.dirname(DATABASE), exist_ok=True)
+    os.makedirs(DATA_DIR, exist_ok=True)
 
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
@@ -24,10 +22,11 @@ def init_db():
         CREATE TABLE IF NOT EXISTS users (
             telegram_id INTEGER PRIMARY KEY,
             username TEXT,
+            first_name TEXT,
             coins INTEGER DEFAULT 0,
             energy INTEGER DEFAULT 1000,
-            last_claim TEXT,
-            referrals INTEGER DEFAULT 0
+            referrals INTEGER DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
