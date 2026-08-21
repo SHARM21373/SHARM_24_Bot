@@ -2,581 +2,1044 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0f19">
 
     <title>SHARM Mining</title>
 
     <style>
         * {
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             margin: 0;
             min-height: 100vh;
+            background: #0b0f19;
+            color: #fff;
             font-family: Arial, sans-serif;
-            background: #0b0f19;
-            color: white;
-        }
-
-        .screen {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 25px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-        }
-
-        .logo {
-            font-size: 58px;
-            margin-bottom: 8px;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 30px;
-        }
-
-        .subtitle {
-            margin-top: 8px;
-            color: #9ca3af;
-            font-size: 15px;
-        }
-
-        .card {
-            margin-top: 28px;
-            padding: 25px 20px;
-            border-radius: 18px;
-            background: #151b29;
-            border: 1px solid #252d3d;
-        }
-
-        .label {
-            display: block;
-            text-align: left;
-            margin-bottom: 10px;
-            color: #cbd5e1;
-            font-size: 14px;
-        }
-
-        input {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #374151;
-            outline: none;
-            background: #0b0f19;
-            color: white;
-            font-size: 15px;
-        }
-
-        input:focus {
-            border-color: #5865f2;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         button {
+            font-family: inherit;
+        }
+
+        .app {
             width: 100%;
-            margin-top: 18px;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            background: #5865f2;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .secondary-button {
-            background: #252d3d;
-        }
-
-        #message {
-            margin-top: 18px;
-            min-height: 22px;
-            font-size: 14px;
-        }
-
-        .support {
-            margin-top: 20px;
-            color: #9ca3af;
-            font-size: 13px;
-        }
-
-        /* Mining Screen */
-
-        .mining-screen {
+            max-width: 520px;
             min-height: 100vh;
-            padding: 25px 18px;
-        }
-
-        .mining-container {
-            width: 100%;
-            max-width: 500px;
             margin: auto;
-            text-align: center;
+            padding: 18px 16px 35px;
         }
 
-        .topbar {
+        /* HEADER */
+
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .brand-icon {
+            font-size: 29px;
+        }
+
+        .brand-name {
             font-size: 20px;
             font-weight: bold;
         }
 
-        .logout {
-            width: auto;
-            margin: 0;
-            padding: 9px 14px;
-            font-size: 13px;
-            background: #252d3d;
+        .online {
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: #13251a;
+            color: #4ade80;
+            font-size: 11px;
         }
 
+        /* BALANCE */
+
         .balance-card {
-            padding: 28px 20px;
-            border-radius: 20px;
+            padding: 23px 18px;
+            border-radius: 21px;
+            text-align: center;
             background: #151b29;
             border: 1px solid #252d3d;
         }
 
-        .balance-title {
+        .balance-label {
             color: #9ca3af;
-            font-size: 14px;
+            font-size: 13px;
         }
 
-        #score {
-            margin: 12px 0;
-            font-size: 42px;
+        #points {
+            margin: 9px 0 3px;
+            font-size: 40px;
             font-weight: bold;
         }
 
         .coin-name {
             color: #9ca3af;
-            font-size: 14px;
+            font-size: 13px;
         }
 
-        .tap-area {
-            margin-top: 30px;
+        /* BATTERY */
+
+        .battery-section {
+            margin-top: 18px;
+            padding: 18px;
+            border-radius: 18px;
+            background: #151b29;
+            border: 1px solid #252d3d;
         }
 
-        #tapBtn {
-            width: 180px;
-            height: 180px;
-            margin: 0 auto;
+        .battery-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .battery-label {
+            color: #cbd5e1;
+        }
+
+        #batteryText {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        .battery-track {
+            width: 100%;
+            height: 13px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #252d3d;
+        }
+
+        #batteryBar {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            background: #4ade80;
+            transition: width 0.3s;
+        }
+
+        .recharge {
+            margin-top: 9px;
+            color: #9ca3af;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        /* TAP */
+
+        .tap-section {
+            margin-top: 23px;
+            text-align: center;
+        }
+
+        .rate {
+            margin-bottom: 15px;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        #tapButton {
+            width: 190px;
+            height: 190px;
+            border: 8px solid #252d3d;
             border-radius: 50%;
             background: #5865f2;
-            border: 8px solid #252d3d;
+            color: #fff;
             font-size: 24px;
             font-weight: bold;
             cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            touch-action: manipulation;
+            box-shadow: 0 12px 35px rgba(0,0,0,.35);
+            transition: transform .08s, opacity .2s;
         }
 
-        #tapBtn:active {
-            transform: scale(0.94);
+        #tapButton:active {
+            transform: scale(.93);
         }
 
-        .tap-info {
-            margin-top: 18px;
+        #tapButton.disabled {
+            opacity: .45;
+            cursor: not-allowed;
+        }
+
+        .tap-help {
+            margin-top: 13px;
             color: #9ca3af;
+            font-size: 12px;
+        }
+
+        /* PENDING */
+
+        .pending {
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 13px;
+            text-align: center;
+            background: #151b29;
+            border: 1px solid #252d3d;
+            color: #cbd5e1;
+            font-size: 13px;
+        }
+
+        #pendingPoints {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        /* GRID */
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .card {
+            padding: 17px;
+            border-radius: 17px;
+            background: #151b29;
+            border: 1px solid #252d3d;
+        }
+
+        .icon {
+            font-size: 25px;
+        }
+
+        .title {
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .value {
+            margin-top: 5px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        .card button {
+            width: 100%;
+            margin-top: 11px;
+            padding: 9px;
+            border: 0;
+            border-radius: 9px;
+            background: #252d3d;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* AIRDROP */
+
+        .airdrop {
+            margin-top: 12px;
+            padding: 18px;
+            border-radius: 17px;
+            background: #151b29;
+            border: 1px solid #252d3d;
+        }
+
+        .airdrop-head {
+            display: flex;
+            justify-content: space-between;
             font-size: 14px;
         }
 
-        .hidden {
-            display: none !important;
-        }
-
-        .success {
-            color: #4ade80;
-        }
-
-        .error {
-            color: #f87171;
-        }
-
-        .info {
+        #airdropPercent {
             color: #60a5fa;
+        }
+
+        .progress {
+            height: 10px;
+            margin-top: 13px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #252d3d;
+        }
+
+        #progressBar {
+            width: 0%;
+            height: 100%;
+            border-radius: 20px;
+            background: #5865f2;
+            transition: width .3s;
+        }
+
+        .airdrop-info {
+            margin-top: 8px;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        /* POPUP */
+
+        .popup {
+            position: fixed;
+            inset: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0,0,0,.72);
+            z-index: 100;
+        }
+
+        .popup.show {
+            display: flex;
+        }
+
+        .popup-box {
+            width: 100%;
+            max-width: 380px;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            background: #151b29;
+            border: 1px solid #252d3d;
+        }
+
+        .popup-icon {
+            font-size: 40px;
+        }
+
+        .popup-title {
+            margin-top: 9px;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .popup-text {
+            margin-top: 9px;
+            color: #9ca3af;
+            font-size: 14px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .close {
+            width: 100%;
+            margin-top: 18px;
+            padding: 12px;
+            border: 0;
+            border-radius: 10px;
+            background: #5865f2;
+            color: white;
+            font-weight: bold;
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 22px;
+            transform: translateX(-50%);
+            display: none;
+            padding: 10px 15px;
+            border-radius: 11px;
+            background: #252d3d;
+            color: white;
+            font-size: 13px;
+            z-index: 200;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @media (max-width: 360px) {
+            #tapButton {
+                width: 165px;
+                height: 165px;
+            }
+
+            #points {
+                font-size: 35px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- =========================
-         TOKEN SCREEN
-    ========================== -->
+<div class="app">
 
-    <section id="tokenScreen" class="screen">
+    <!-- HEADER -->
 
-        <div class="container">
+    <div class="header">
 
-            <div class="logo">⛏️</div>
+        <div class="brand">
+            <div class="brand-icon">⛏️</div>
+            <div class="brand-name">SHARM Mining</div>
+        </div>
 
-            <h1>SHARM Mining</h1>
+        <div class="online">
+            ● Online
+        </div>
 
-            <div class="subtitle">
-                Welcome to SHARM Mining
-            </div>
+    </div>
 
-            <div class="card">
 
-                <label class="label" for="tokenInput">
-                    Enter your access token
-                </label>
+    <!-- POINTS -->
 
-                <input
-                    id="tokenInput"
-                    type="text"
-                    placeholder="SHARM-XXXX-XXXX"
-                    autocomplete="off"
-                    maxlength="40"
-                >
+    <div class="balance-card">
 
-                <button id="verifyBtn">
-                    🔐 Verify Token
-                </button>
+        <div class="balance-label">
+            SHARM Points
+        </div>
 
-                <div id="message"></div>
+        <div id="points">
+            0
+        </div>
 
-            </div>
+        <div class="coin-name">
+            Mining Points
+        </div>
 
-            <div class="support">
-                Don't have a token? Contact Support
-            </div>
+    </div>
+
+
+    <!-- BATTERY -->
+
+    <div class="battery-section">
+
+        <div class="battery-header">
+
+            <span class="battery-label">
+                🔋 Battery
+            </span>
+
+            <span id="batteryText">
+                1500 / 1500
+            </span>
 
         </div>
 
-    </section>
+        <div class="battery-track">
 
-
-    <!-- =========================
-         MINING SCREEN
-    ========================== -->
-
-    <section id="miningScreen" class="mining-screen hidden">
-
-        <div class="mining-container">
-
-            <div class="topbar">
-
-                <div class="brand">
-                    ⛏️ SHARM Mining
-                </div>
-
-                <button
-                    id="logoutBtn"
-                    class="logout"
-                >
-                    Logout
-                </button>
-
-            </div>
-
-
-            <div class="balance-card">
-
-                <div class="balance-title">
-                    Your SHARM Balance
-                </div>
-
-                <div id="score">
-                    0
-                </div>
-
-                <div class="coin-name">
-                    SHARM
-                </div>
-
-            </div>
-
-
-            <div class="tap-area">
-
-                <button id="tapBtn">
-                    ⛏️ TAP
-                </button>
-
-                <div class="tap-info">
-                    Tap to mine SHARM
-                </div>
-
-            </div>
+            <div id="batteryBar"></div>
 
         </div>
 
-    </section>
+        <div class="recharge">
+            ⚡ Battery recharges automatically
+        </div>
+
+    </div>
 
 
-    <script>
+    <!-- TAP -->
 
-        /* =========================
-           STORAGE KEYS
-        ========================== */
+    <div class="tap-section">
 
-        const TOKEN_KEY = "sharmAccessToken";
-        const BALANCE_KEY = "sharmBalance";
+        <div class="rate">
+            ⚡ 1 Point per Tap • 3 sec processing
+        </div>
 
+        <button id="tapButton">
+            ⛏️ TAP
+        </button>
 
-        /* =========================
-           ELEMENTS
-        ========================== */
+        <div class="tap-help">
+            One valid touch = one Battery
+        </div>
 
-        const tokenScreen =
-            document.getElementById("tokenScreen");
-
-        const miningScreen =
-            document.getElementById("miningScreen");
-
-        const tokenInput =
-            document.getElementById("tokenInput");
-
-        const verifyBtn =
-            document.getElementById("verifyBtn");
-
-        const message =
-            document.getElementById("message");
-
-        const scoreDisplay =
-            document.getElementById("score");
-
-        const tapBtn =
-            document.getElementById("tapBtn");
-
-        const logoutBtn =
-            document.getElementById("logoutBtn");
+    </div>
 
 
-        /* =========================
-           SHOW MINING SCREEN
-        ========================== */
+    <!-- PENDING -->
 
-        function showMiningScreen() {
+    <div class="pending">
 
-            tokenScreen.classList.add("hidden");
-            miningScreen.classList.remove("hidden");
+        ⏳ Pending Points:
+        <span id="pendingPoints">0</span>
 
-            updateScore();
+    </div>
+
+
+    <!-- FEATURES -->
+
+    <div class="grid">
+
+        <div class="card">
+
+            <div class="icon">🎁</div>
+
+            <div class="title">
+                Daily Reward
+            </div>
+
+            <div id="dailyStatus" class="value">
+                Available
+            </div>
+
+            <button id="dailyButton">
+                Claim
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">👥</div>
+
+            <div class="title">
+                Referral
+            </div>
+
+            <div id="referralValue" class="value">
+                0 Friends
+            </div>
+
+            <button id="referralButton">
+                Invite
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">🏆</div>
+
+            <div class="title">
+                Leaderboard
+            </div>
+
+            <div class="value">
+                View ranking
+            </div>
+
+            <button id="leaderboardButton">
+                Open
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">⚡</div>
+
+            <div class="title">
+                Mining Rate
+            </div>
+
+            <div class="value">
+                +1 Point / Tap
+            </div>
+
+            <button id="upgradeButton">
+                Upgrade
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- AIRDROP -->
+
+    <div class="airdrop">
+
+        <div class="airdrop-head">
+
+            <strong>
+                🪂 Airdrop Progress
+            </strong>
+
+            <span id="airdropPercent">
+                0%
+            </span>
+
+        </div>
+
+        <div class="progress">
+
+            <div id="progressBar"></div>
+
+        </div>
+
+        <div id="airdropInfo" class="airdrop-info">
+            0 / 10000 Points
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- POPUP -->
+
+<div id="popup" class="popup">
+
+    <div class="popup-box">
+
+        <div id="popupIcon" class="popup-icon">
+            ⛏️
+        </div>
+
+        <div id="popupTitle" class="popup-title">
+            SHARM Mining
+        </div>
+
+        <div id="popupText" class="popup-text">
+            Welcome to SHARM Mining.
+        </div>
+
+        <button id="closePopup" class="close">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+
+<div id="toast" class="toast">
+    +1 SHARM Point
+</div>
+
+
+<script>
+
+    /* =========================
+       SETTINGS
+    ========================== */
+
+    const MAX_BATTERY = 1500;
+
+    const POINT_PER_TAP = 1;
+
+    const PROCESSING_TIME = 3000;
+
+    /*
+       Recharge:
+       1 Battery every 60 seconds.
+       This can later be controlled
+       from the Admin Panel.
+    */
+    const RECHARGE_TIME = 60000;
+
+    const AIRDROP_TARGET = 10000;
+
+
+    /* =========================
+       STORAGE
+    ========================== */
+
+    const POINTS_KEY = "sharmPoints";
+
+    const BATTERY_KEY = "sharmBattery";
+
+    const PENDING_KEY = "sharmPending";
+
+    const LAST_RECHARGE_KEY = "sharmLastRecharge";
+
+    const DAILY_KEY = "sharmDailyReward";
+
+    const REFERRAL_KEY = "sharmReferrals";
+
+
+    /* =========================
+       ELEMENTS
+    ========================== */
+
+    const pointsEl =
+        document.getElementById("points");
+
+    const batteryText =
+        document.getElementById("batteryText");
+
+    const batteryBar =
+        document.getElementById("batteryBar");
+
+    const tapButton =
+        document.getElementById("tapButton");
+
+    const pendingEl =
+        document.getElementById("pendingPoints");
+
+    const airdropPercent =
+        document.getElementById("airdropPercent");
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+    const airdropInfo =
+        document.getElementById("airdropInfo");
+
+    const dailyButton =
+        document.getElementById("dailyButton");
+
+    const dailyStatus =
+        document.getElementById("dailyStatus");
+
+    const referralValue =
+        document.getElementById("referralValue");
+
+    const referralButton =
+        document.getElementById("referralButton");
+
+    const leaderboardButton =
+        document.getElementById("leaderboardButton");
+
+    const upgradeButton =
+        document.getElementById("upgradeButton");
+
+    const popup =
+        document.getElementById("popup");
+
+    const popupIcon =
+        document.getElementById("popupIcon");
+
+    const popupTitle =
+        document.getElementById("popupTitle");
+
+    const popupText =
+        document.getElementById("popupText");
+
+    const closePopup =
+        document.getElementById("closePopup");
+
+    const toast =
+        document.getElementById("toast");
+
+
+    /* =========================
+       STORAGE HELPERS
+    ========================== */
+
+    function getPoints() {
+
+        return Number(
+            localStorage.getItem(POINTS_KEY)
+        ) || 0;
+
+    }
+
+
+    function setPoints(value) {
+
+        localStorage.setItem(
+            POINTS_KEY,
+            Math.max(0, Math.floor(value))
+        );
+
+    }
+
+
+    function getBattery() {
+
+        const saved =
+            localStorage.getItem(BATTERY_KEY);
+
+        if (saved === null) {
+            return MAX_BATTERY;
         }
 
+        return Math.min(
+            MAX_BATTERY,
+            Math.max(0, Number(saved))
+        );
 
-        /* =========================
-           SHOW TOKEN SCREEN
-        ========================== */
+    }
 
-        function showTokenScreen() {
 
-            miningScreen.classList.add("hidden");
-            tokenScreen.classList.remove("hidden");
+    function setBattery(value) {
 
-            tokenInput.value = "";
-            message.textContent = "";
-            message.className = "";
+        localStorage.setItem(
+            BATTERY_KEY,
+            Math.min(
+                MAX_BATTERY,
+                Math.max(0, Math.floor(value))
+            )
+        );
+
+    }
+
+
+    function getPending() {
+
+        return Number(
+            localStorage.getItem(PENDING_KEY)
+        ) || 0;
+
+    }
+
+
+    function setPending(value) {
+
+        localStorage.setItem(
+            PENDING_KEY,
+            Math.max(0, Math.floor(value))
+        );
+
+    }
+
+
+    /* =========================
+       DASHBOARD
+    ========================== */
+
+    function updateDashboard() {
+
+        const points =
+            getPoints();
+
+        const battery =
+            getBattery();
+
+        const pending =
+            getPending();
+
+        pointsEl.textContent =
+            points.toLocaleString();
+
+        batteryText.textContent =
+            battery.toLocaleString()
+            + " / "
+            + MAX_BATTERY.toLocaleString();
+
+        const batteryPercent =
+            (battery / MAX_BATTERY) * 100;
+
+        batteryBar.style.width =
+            batteryPercent + "%";
+
+        pendingEl.textContent =
+            pending.toLocaleString();
+
+        if (battery <= 0) {
+
+            tapButton.disabled = true;
+
+            tapButton.classList.add(
+                "disabled"
+            );
+
+            tapButton.textContent =
+                "🔋 EMPTY";
+
+        } else {
+
+            tapButton.disabled = false;
+
+            tapButton.classList.remove(
+                "disabled"
+            );
+
+            tapButton.textContent =
+                "⛏️ TAP";
+
         }
 
+        updateAirdrop(points);
 
-        /* =========================
-           UPDATE BALANCE
-        ========================== */
-
-        function updateScore() {
-
-            const score =
-                Number(localStorage.getItem(BALANCE_KEY)) || 0;
-
-            scoreDisplay.textContent =
-                score.toLocaleString();
-        }
+    }
 
 
-        /* =========================
-           TOKEN VERIFICATION
-        ========================== */
+    /* =========================
+       TAP
+    ========================== */
 
-        function verifyToken() {
+    let tapLocked = false;
 
-            const token =
-                tokenInput.value.trim();
+    let lastTapTime = 0;
 
-            if (!token) {
 
-                message.textContent =
-                    "⚠️ Please enter your token.";
+    tapButton.addEventListener(
+        "pointerdown",
+        function(event) {
 
-                message.className = "error";
+            /*
+             * Prevent multiple simultaneous
+             * touches from creating multiple
+             * rewards.
+             */
+
+            event.preventDefault();
+
+            const now =
+                Date.now();
+
+            /*
+             * One valid tap at a time.
+             */
+
+            if (tapLocked) {
+                return;
+            }
+
+            /*
+             * Small anti-double-trigger
+             * protection.
+             */
+
+            if (
+                now - lastTapTime < 250
+            ) {
+                return;
+            }
+
+            const battery =
+                getBattery();
+
+            if (battery <= 0) {
+
+                updateDashboard();
+
+                showToast(
+                    "🔋 Battery empty"
+                );
 
                 return;
             }
 
+            tapLocked = true;
 
-            message.textContent =
-                "🔄 Checking token...";
+            lastTapTime = now;
 
-            message.className = "info";
 
-            verifyBtn.disabled = true;
+            /* Battery -1 */
+
+            setBattery(
+                battery - 1
+            );
+
+
+            /* Pending +1 */
+
+            setPending(
+                getPending()
+                + POINT_PER_TAP
+            );
+
+            updateDashboard();
+
+            showToast(
+                "🔋 -1 • ⏳ +1 pending"
+            );
 
 
             /*
-             * DEMO VERIFICATION
-             *
-             * This currently checks only the token format.
-             *
-             * Real customer-token verification
-             * will be connected to the backend later.
+             * Point arrives after
+             * 3 seconds.
              */
 
-            setTimeout(function () {
+            setTimeout(
+                function() {
 
-                const tokenPattern =
-                    /^SHARM-[A-Z0-9]{4}-[A-Z0-9]{4}$/i;
+                    const pending =
+                        getPending();
+
+                    if (pending > 0) {
+
+                        setPending(
+                            pending - 1
+                        );
+
+                        setPoints(
+                            getPoints()
+                            + POINT_PER_TAP
+                        );
+
+                        updateDashboard();
+
+                        showToast(
+                            "💰 +1 SHARM Point"
+                        );
+
+                    }
+
+                },
+                PROCESSING_TIME
+            );
 
 
-                if (tokenPattern.test(token)) {
+            /*
+             * Release lock shortly after
+             * the physical tap.
+             */
 
-                    localStorage.setItem(
-                        TOKEN_KEY,
-                        token
-                    );
+            setTimeout(
+                function() {
 
-                    message.textContent =
-                        "✅ Token verified successfully!";
+                    tapLocked = false;
 
-                    message.className = "success";
+                },
+                250
+            );
 
-                    setTimeout(function () {
+        },
+        {
+            passive: false
+        }
+    );
 
-                        showMiningScreen();
 
-                    }, 500);
+    /* =========================
+       BATTERY RECHARGE
+    ========================== */
 
-                } else {
+    function rechargeBattery() {
 
-                    message.textContent =
-                        "❌ Invalid token format.";
+        let battery =
+            getBattery();
 
-                    message.className = "error";
+        if (battery >= MAX_BATTERY) {
 
-                    verifyBtn.disabled = false;
-                }
+            localStorage.setItem(
+                LAST_RECHARGE_KEY,
+                Date.now()
+            );
 
-            }, 700);
+            return;
+
         }
 
 
-        /* =========================
-           TAP MINING
-        ========================== */
+        let lastRecharge =
+            Number(
+                localStorage.getItem(
+                    LAST_RECHARGE_KEY
+                )
+            ) || Date.now();
 
-        tapBtn.addEventListener(
-            "click",
-            function () {
 
-                let score =
-                    Number(
-                        localStorage.getItem(BALANCE_KEY)
-                    ) || 0;
+        const elapsed =
+            Date.now() - lastRecharge;
 
-                score += 1;
 
-                localStorage.setItem(
-                    BALANCE_KEY,
-                    score
+        const rechargeCount =
+            Math.floor(
+                elapsed / RECHARGE_TIME
+            );
+
+
+        if (rechargeCount > 0) {
+
+            battery =
+                Math.min(
+                    MAX_BATTERY,
+                    battery + rechargeCount
                 );
 
-                updateScore();
-            }
-        );
 
-
-        /* =========================
-           VERIFY BUTTON
-        ========================== */
-
-        verifyBtn.addEventListener(
-            "click",
-            verifyToken
-        );
-
-
-        /* =========================
-           ENTER KEY
-        ========================== */
-
-        tokenInput.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (event.key === "Enter") {
-                    verifyToken();
-                }
-
-            }
-        );
-
-
-        /* =========================
-           LOGOUT
-        ========================== */
-
-        logoutBtn.addEventListener(
-            "click",
-            function () {
-
-                localStorage.removeItem(
-                    TOKEN_KEY
-                );
-
-                showTokenScreen();
-            }
-        );
-
-
-        /* =========================
-           INITIAL APP LOAD
-        ========================== */
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            function () {
-
-                const savedToken =
-                    localStorage.getItem(TOKEN_KEY);
-
-                if (savedToken) {
-
-                    showMiningScreen();
-
-                } else {
-
-                    showTokenScreen();
-
-                }
-
-            }
-        );
-
-    </script>
-
-</body>
-</html>
+           
