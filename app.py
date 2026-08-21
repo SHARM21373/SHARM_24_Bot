@@ -6,18 +6,12 @@ from database import init_db
 from routes import routes
 from bot import start_bot
 
-from flask import Flask, jsonify
-
-from database import init_db
-from routes import routes
-
-app = Flask(__name__)
-
 
 app = Flask(__name__)
 
 init_db()
 app.register_blueprint(routes)
+
 
 _bot_started = False
 _bot_lock = threading.Lock()
