@@ -8,13 +8,11 @@ from telegram.ext import (
     ContextTypes,
 )
 
-# Logging
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO,
 )
 
-# Telegram Bot Token
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 
@@ -38,16 +36,13 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     if not BOT_TOKEN:
-        raise ValueError(
-            "BOT_TOKEN পাওয়া যায়নি। Environment Variables-এ BOT_TOKEN সেট করুন।"
-        )
+        raise RuntimeError("BOT_TOKEN environment variable is not set")
 
     application = Application.builder().token(BOT_TOKEN).build()
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
 
-    print("Bot is running...")
     application.run_polling()
 
 
