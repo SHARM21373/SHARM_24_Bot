@@ -1,0 +1,50 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    background: #101827;
+    color: white;
+    text-align: center;
+}
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 25px;
+}
+
+.score {
+    font-size: 24px;
+    margin-bottom: 40px;
+}
+
+#score {
+    font-weight: bold;
+}
+
+#tapBtn {
+    width: 220px;
+    height: 220px;
+    border: none;
+    border-radius: 50%;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #f5c542;
+    color: #101827;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    transition: transform 0.08s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#tapBtn:active {
+    transform: scale(0.92);
+}
