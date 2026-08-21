@@ -1,10 +1,9 @@
-import threading
-
 from flask import Flask, jsonify
 
 from database import init_db
 from routes import routes
-from bot import start_bot
+
+app = Flask(__name__)
 
 
 app = Flask(__name__)
