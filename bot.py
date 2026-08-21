@@ -1,4 +1,5 @@
 import os
+
 from telegram import Update
 from telegram.ext import (
     Application,
@@ -11,10 +12,23 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 if not BOT_TOKEN:
     raise RuntimeError("BOT_TOKEN environment variable is not set")
 
+
+async def post_init(application: Application):
+    await application.initialize()
+    await application.start()
+
+
+async def post_shutdown(application: Application):
+    await application.stop()
+    await application.shutdown()
+
+
 application = (
     Application.builder()
     .token(BOT_TOKEN)
     .updater(None)
+    .post_init(post_init)
+    .post_shutdown(post_shutdown)
     .build()
 )
 
