@@ -26,9 +26,16 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 
 DATABASE_PATH = os.path.join(DATA_DIR, "sharm.db")
 
+
 def get_connection():
     os.makedirs(DATA_DIR, exist_ok=True)
-    return sqlite3.connect(DATABASE_PATH)
+
+    conn = sqlite3.connect(DATABASE_PATH)
+
+    conn.row_factory = sqlite3.Row
+
+    return conn
+
 
 # =====================================
 # Mining
@@ -95,6 +102,38 @@ def init_db():
 
     cursor = conn.cursor()
 
+    # ======================================
+    # USERS
+    # ======================================
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+
+        telegram_id INTEGER PRIMARY KEY,
+
+        username TEXT DEFAULT '',
+
+        first_name TEXT DEFAULT '',
+
+        balance INTEGER DEFAULT 0,
+
+        battery INTEGER DEFAULT 1500,
+
+        max_battery INTEGER DEFAULT 1500,
+
+        tap_power INTEGER DEFAULT 1,
+
+        mine_level INTEGER DEFAULT 1,
+
+        referrals INTEGER DEFAULT 0,
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    )
+    """)
+
 
     # ======================================
     # SHOP UPGRADES
@@ -139,6 +178,25 @@ def init_db():
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
         PRIMARY KEY (telegram_id, upgrade_name)
+
+    )
+    """)
+
+
+    # ======================================
+    # ANNOUNCEMENTS
+    # ======================================
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS announcements (
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        title TEXT,
+
+        message TEXT,
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
     )
     """)
