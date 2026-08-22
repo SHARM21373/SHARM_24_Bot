@@ -15,7 +15,50 @@ from config import (
     MAX_BATTERY,
     REFERRAL_REWARD
 )
+def verify_telegram_init_data(init_data):
+    if not init_data:
+        return None
 
+    try:
+        data = dict(parse_qsl(init_data, keep_blank_values=True))
+
+        received_hash = data.pop("hash", None)
+
+        if not received_hash:
+            return None
+
+        data_check_string = "\n".join(
+            f"{key}={data[key]}"
+            for key in sorted(data)
+        )
+
+        secret_key = hmac.new(
+            b"WebAppData",
+            BOT_TOKEN.encode(),
+            hashlib.sha256
+        ).digest()
+
+        calculated_hash = hmac.new(
+            secret_key,
+            data_check_string.encode(),
+            hashlib.sha256
+        ).hexdigest()
+
+        if not hmac.compare_digest(
+            calculated_hash,
+            received_hash
+        ):
+            return None
+
+        user_data = data.get("user")
+
+        if not user_data:
+            return None
+
+        return json.loads(user_data)
+
+    except Exception:
+        return None
 routes = Blueprint("routes", __name__)
 
 # ==========================================
