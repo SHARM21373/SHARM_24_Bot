@@ -324,6 +324,26 @@ def init_db():
     # Save Database
     # ======================================
 
-    conn.commit()
+   # ======================================
+   # USERS DATABASE MIGRATION
+   # ======================================
 
-    conn.close()
+columns = [
+    row[1]
+    for row in cursor.execute("PRAGMA table_info(users)").fetchall()
+]
+
+if "referred_by" not in columns:
+    cursor.execute(
+        "ALTER TABLE users ADD COLUMN referred_by INTEGER DEFAULT NULL"
+    )
+
+if "referral_rewarded" not in columns:
+    cursor.execute(
+        "ALTER TABLE users ADD COLUMN referral_rewarded INTEGER DEFAULT 0"
+    )
+
+conn.commit()
+
+conn.close()
+
