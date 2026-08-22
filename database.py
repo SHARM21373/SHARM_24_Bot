@@ -26,6 +26,9 @@ DATA_DIR = os.path.join(BASE_DIR, "data")
 
 DATABASE_PATH = os.path.join(DATA_DIR, "sharm.db")
 
+def get_connection():
+    os.makedirs(DATA_DIR, exist_ok=True)
+    return sqlite3.connect(DATABASE_PATH)
 
 # =====================================
 # Mining
