@@ -1,4 +1,5 @@
 import os
+import sqlite3
 
 # =====================================
 # Application
@@ -7,11 +8,13 @@ import os
 APP_NAME = "SHARM Mining"
 APP_VERSION = "1.0.0"
 
+
 # =====================================
 # Telegram
 # =====================================
 
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
+
 
 # =====================================
 # Database
@@ -22,6 +25,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
 DATABASE_PATH = os.path.join(DATA_DIR, "sharm.db")
+
 
 # =====================================
 # Mining
@@ -39,17 +43,20 @@ PROCESSING_SECONDS = 3
 
 BATTERY_RECHARGE_SECONDS = 60
 
+
 # =====================================
 # Referral
 # =====================================
 
 REFERRAL_REWARD = 100
 
+
 # =====================================
 # Security
 # =====================================
 
 REQUEST_LIMIT_PER_SECOND = 5
+
 
 # =====================================
 # UI
@@ -58,6 +65,7 @@ REQUEST_LIMIT_PER_SECOND = 5
 APP_THEME = "dark"
 
 COIN_NAME = "SHARM"
+
 
 # =====================================
 # Future Features
@@ -70,49 +78,73 @@ ENABLE_TOKEN = False
 ENABLE_WITHDRAW = False
 
 ENABLE_UPGRADE = False
-# ======================================
-# SHOP UPGRADES
-# ======================================
-
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS shop_upgrades (
-
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-    name TEXT NOT NULL,
-
-    description TEXT,
-
-    price INTEGER NOT NULL,
-
-    effect_type TEXT,
-
-    effect_value INTEGER,
-
-    max_level INTEGER DEFAULT 10,
-
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
-)
-""")
 
 
-# ======================================
-# USER UPGRADES
-# ======================================
+# =====================================
+# Database Initialization
+# =====================================
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS user_upgrades (
+def init_db():
 
-    telegram_id INTEGER NOT NULL,
+    os.makedirs(DATA_DIR, exist_ok=True)
 
-    upgrade_name TEXT NOT NULL,
+    conn = sqlite3.connect(DATABASE_PATH)
 
-    level INTEGER DEFAULT 1,
+    cursor = conn.cursor()
 
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    PRIMARY KEY (telegram_id, upgrade_name)
+    # ======================================
+    # SHOP UPGRADES
+    # ======================================
 
-)
-""")
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS shop_upgrades (
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        name TEXT NOT NULL,
+
+        description TEXT,
+
+        price INTEGER NOT NULL,
+
+        effect_type TEXT,
+
+        effect_value INTEGER,
+
+        max_level INTEGER DEFAULT 10,
+
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    )
+    """)
+
+
+    # ======================================
+    # USER UPGRADES
+    # ======================================
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS user_upgrades (
+
+        telegram_id INTEGER NOT NULL,
+
+        upgrade_name TEXT NOT NULL,
+
+        level INTEGER DEFAULT 1,
+
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        PRIMARY KEY (telegram_id, upgrade_name)
+
+    )
+    """)
+
+
+    # ======================================
+    # Save Database
+    # ======================================
+
+    conn.commit()
+
+    conn.close()
