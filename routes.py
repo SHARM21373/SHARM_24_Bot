@@ -135,27 +135,28 @@ def get_me():
 
     if user is None:
 
-        conn.execute(
+   conn.execute(
             """
-            INSERT INTO users(
-                telegram_id,
-                username,
-                first_name,
-                balance,
-                battery,
-                max_battery
-            )
-            VALUES(?,?,?,?,?,?)
-            """,
+       INSERT INTO users(
+           telegram_id,
+           username,
+            first_name,
+            balance,
+            battery,
+            max_battery,
+            referred_by
+      )
+      VALUES(?,?,?,?,?,?,?)
+      """,
             (
                 telegram_id,
                 username,
                 first_name,
                 DEFAULT_BALANCE,
                 DEFAULT_BATTERY,
-                MAX_BATTERY
+                MAX_BATTERY,
+                referrer_id
             )
-        )
 
         conn.commit()
 
