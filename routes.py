@@ -1,4 +1,3 @@
-import os
 import hmac
 import hashlib
 import json
@@ -7,27 +6,28 @@ from urllib.parse import parse_qsl
 from flask import Blueprint, jsonify, request
 
 from database import get_connection
-
+from config import (
+    BOT_TOKEN,
+    APP_NAME,
+    APP_VERSION,
+    DEFAULT_BALANCE,
+    DEFAULT_BATTERY,
+    MAX_BATTERY
+)
 
 routes = Blueprint("routes", __name__)
 
-
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
-
-MAX_ENERGY = 1500
-POINT_PER_TAP = 1
-PROCESSING_SECONDS = 3
-
-
-# =========================================================
-# Telegram Mini App initData verification
-# =========================================================
+# ==========================================
+# Telegram Mini App Authentication
+# ==========================================
 
 def verify_telegram_init_data(init_data):
+
     if not BOT_TOKEN or not init_data:
         return None
 
     try:
+
         data = dict(
             parse_qsl(
                 init_data,
@@ -41,8 +41,8 @@ def verify_telegram_init_data(init_data):
             return None
 
         data_check_string = "\n".join(
-            f"{key}={value}"
-            for key, value in sorted(data.items())
+            f"{k}={v}"
+            for k, v in sorted(data.items())
         )
 
         secret_key = hmac.new(
@@ -63,52 +63,54 @@ def verify_telegram_init_data(init_data):
         ):
             return None
 
-        user_data = data.get("user")
-
-        if not user_data:
-            return None
-
-        return json.loads(user_data)
+        return json.loads(data["user"])
 
     except Exception:
         return None
 
 
-# =========================================================
-# Status
-# =========================================================
+# ==========================================
+# Health
+# ==========================================
 
-@routes.route("/api/status", methods=["GET"])
-def status():
-    return jsonify({
-        "success": True,
-        "message": "SHARM TAP API is running",
-        "version": "3.0.0"
-    })
-
-
-@routes.route("/health", methods=["GET"])
+@routes.get("/health")
 def health():
+
     return jsonify({
         "success": True,
         "status": "healthy"
     })
 
 
-# =========================================================
-# Get / create Telegram user
-# =========================================================
+# ==========================================
+# API Status
+# ==========================================
 
-@routes.route("/api/me", methods=["POST"])
+@routes.get("/api/status")
+def status():
+
+    return jsonify({
+        "success": True,
+        "app": APP_NAME,
+        "version": APP_VERSION
+    })
+
+
+# ==========================================
+# Current User
+# ==========================================
+
+@routes.post("/api/me")
 def get_me():
 
     body = request.get_json(silent=True) or {}
 
-    init_data = body.get("initData", "")
+    telegram_user = verify_telegram_init_data(
+        body.get("initData", "")
+    )
 
-    telegram_user = verify_telegram_init_data(init_data)
+    if telegram_user is None:
 
-    if not telegram_user:
         return jsonify({
             "success": False,
             "error": "Invalid Telegram session"
@@ -122,13 +124,7 @@ def get_me():
 
     user = conn.execute(
         """
-        SELECT
-            telegram_id,
-            username,
-            first_name,
-            coins,
-            energy,
-            referrals
+        SELECT *
         FROM users
         WHERE telegram_id = ?
         """,
@@ -139,21 +135,23 @@ def get_me():
 
         conn.execute(
             """
-            INSERT INTO users (
+            INSERT INTO users(
                 telegram_id,
                 username,
                 first_name,
-                coins,
-                energy,
-                referrals
+                balance,
+                battery,
+                max_battery
             )
-            VALUES (?, ?, ?, 0, ?, 0)
+            VALUES(?,?,?,?,?,?)
             """,
             (
                 telegram_id,
                 username,
                 first_name,
-                MAX_ENERGY
+                DEFAULT_BALANCE,
+                DEFAULT_BATTERY,
+                MAX_BATTERY
             )
         )
 
@@ -161,37 +159,12 @@ def get_me():
 
         user = conn.execute(
             """
-            SELECT
-                telegram_id,
-                username,
-                first_name,
-                coins,
-                energy,
-                referrals
+            SELECT *
             FROM users
             WHERE telegram_id = ?
             """,
             (telegram_id,)
         ).fetchone()
-
-    else:
-
-        # Existing users: don't suddenly reset their balance.
-        # Only update profile information.
-        conn.execute(
-            """
-            UPDATE users
-            SET username = ?, first_name = ?
-            WHERE telegram_id = ?
-            """,
-            (
-                username,
-                first_name,
-                telegram_id
-            )
-        )
-
-        conn.commit()
 
     conn.close()
 
@@ -202,27 +175,28 @@ def get_me():
             "username": user["username"],
             "first_name": user["first_name"]
         },
-        "balance": int(user["coins"] or 0),
-        "battery": int(user["energy"] or 0),
-        "max_battery": MAX_ENERGY,
-        "referrals": int(user["referrals"] or 0)
+        "balance": user["balance"],
+        "battery": user["battery"],
+        "max_battery": user["max_battery"],
+        "tap_power": user["tap_power"],
+        "mine_level": user["mine_level"],
+        "referrals": user["referrals"]
     })
-
-
-# =========================================================
+    # ==========================================
 # TAP
-# =========================================================
+# ==========================================
 
-@routes.route("/api/tap", methods=["POST"])
+@routes.post("/api/tap")
 def tap():
 
     body = request.get_json(silent=True) or {}
 
-    init_data = body.get("initData", "")
+    telegram_user = verify_telegram_init_data(
+        body.get("initData", "")
+    )
 
-    telegram_user = verify_telegram_init_data(init_data)
+    if telegram_user is None:
 
-    if not telegram_user:
         return jsonify({
             "success": False,
             "error": "Invalid Telegram session"
@@ -234,7 +208,95 @@ def tap():
 
     user = conn.execute(
         """
-        SELECT coins, energy
+        SELECT
+            balance,
+            battery,
+            max_battery,
+            tap_power
+        FROM users
+        WHERE telegram_id = ?
+        """,
+        (telegram_id,)
+    ).fetchone()
+
+    if user is None:
+
+        conn.close()
+
+        return jsonify({
+            "success": False,
+            "error": "User not found"
+        }), 404
+
+    balance = int(user["balance"])
+    battery = int(user["battery"])
+    tap_power = int(user["tap_power"])
+
+    if battery < tap_power:
+
+        conn.close()
+
+        return jsonify({
+            "success": False,
+            "error": "Battery empty",
+            "balance": balance,
+            "battery": battery
+        }), 400
+
+    new_balance = balance + tap_power
+    new_battery = battery - tap_power
+
+    conn.execute(
+        """
+        UPDATE users
+        SET
+            balance = ?,
+            battery = ?,
+            last_login = CURRENT_TIMESTAMP
+        WHERE telegram_id = ?
+        """,
+        (
+            new_balance,
+            new_battery,
+            telegram_id
+        )
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "added": tap_power,
+        "balance": new_balance,
+        "battery": new_battery
+    })
+# ==========================================
+# REFERRAL
+# ==========================================
+
+@routes.post("/api/referral")
+def referral():
+
+    body = request.get_json(silent=True) or {}
+
+    telegram_user = verify_telegram_init_data(
+        body.get("initData", "")
+    )
+
+    if telegram_user is None:
+        return jsonify({
+            "success": False,
+            "error": "Invalid Telegram session"
+        }), 401
+
+    telegram_id = int(telegram_user["id"])
+
+    conn = get_connection()
+
+    user = conn.execute(
+        """
+        SELECT telegram_id, referrals
         FROM users
         WHERE telegram_id = ?
         """,
@@ -249,45 +311,205 @@ def tap():
             "error": "User not found"
         }), 404
 
-    balance = int(user["coins"] or 0)
-    energy = int(user["energy"] or 0)
+    referrals = int(user["referrals"] or 0)
 
-    if energy <= 0:
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "referrals": referrals
+    })
+
+
+# ==========================================
+# LEADERBOARD
+# ==========================================
+
+@routes.get("/api/leaderboard")
+def leaderboard():
+
+    conn = get_connection()
+
+    rows = conn.execute(
+        """
+        SELECT
+            telegram_id,
+            username,
+            first_name,
+            balance
+        FROM users
+        ORDER BY balance DESC
+        LIMIT 50
+        """
+    ).fetchall()
+
+    leaderboard_data = []
+
+    for position, row in enumerate(rows, start=1):
+
+        display_name = (
+            row["username"]
+            or row["first_name"]
+            or "Telegram User"
+        )
+
+        leaderboard_data.append({
+            "rank": position,
+            "telegram_id": row["telegram_id"],
+            "username": display_name,
+            "balance": int(row["balance"] or 0)
+        })
+
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "leaderboard": leaderboard_data
+    })
+
+
+# ==========================================
+# DAILY REWARD
+# ==========================================
+
+@routes.post("/api/daily/claim")
+def claim_daily_reward():
+
+    body = request.get_json(silent=True) or {}
+
+    telegram_user = verify_telegram_init_data(
+        body.get("initData", "")
+    )
+
+    if telegram_user is None:
+        return jsonify({
+            "success": False,
+            "error": "Invalid Telegram session"
+        }), 401
+
+    telegram_id = int(telegram_user["id"])
+
+    conn = get_connection()
+
+    user = conn.execute(
+        """
+        SELECT balance
+        FROM users
+        WHERE telegram_id = ?
+        """,
+        (telegram_id,)
+    ).fetchone()
+
+    if user is None:
         conn.close()
 
         return jsonify({
             "success": False,
-            "error": "Battery empty",
-            "balance": balance,
-            "battery": 0
-        }), 400
+            "error": "User not found"
+        }), 404
 
-    # One valid tap:
-    # Battery -1
-    # Coin +1
-    new_energy = energy - 1
-    new_balance = balance + POINT_PER_TAP
+    # Base daily reward.
+    # পরে চাইলে settings/table থেকে পরিবর্তন করা যাবে।
+    reward = 100
 
     conn.execute(
         """
         UPDATE users
-        SET coins = ?, energy = ?
+        SET balance = balance + ?
         WHERE telegram_id = ?
         """,
         (
-            new_balance,
-            new_energy,
+            reward,
             telegram_id
         )
     )
 
     conn.commit()
+
+    updated_user = conn.execute(
+        """
+        SELECT balance
+        FROM users
+        WHERE telegram_id = ?
+        """,
+        (telegram_id,)
+    ).fetchone()
+
     conn.close()
 
     return jsonify({
         "success": True,
-        "added": POINT_PER_TAP,
-        "balance": new_balance,
-        "battery": new_energy,
-        "processing_seconds": PROCESSING_SECONDS
+        "reward": reward,
+        "balance": int(updated_user["balance"] or 0)
     })
+
+
+# ==========================================
+# SETTINGS
+# ==========================================
+
+@routes.get("/api/settings")
+def settings():
+
+    return jsonify({
+        "success": True,
+        "settings": {
+            "app_name": APP_NAME,
+            "version": APP_VERSION,
+            "tap_enabled": True,
+            "referral_enabled": True,
+            "leaderboard_enabled": True,
+            "daily_reward_enabled": True,
+            "shop_enabled": True,
+            "wallet_connect": False,
+            "airdrop": "coming_soon"
+        }
+    })
+
+
+# ==========================================
+# ANNOUNCEMENTS
+# ==========================================
+
+@routes.get("/api/announcements")
+def announcements():
+
+    conn = get_connection()
+
+    try:
+
+        rows = conn.execute(
+            """
+            SELECT *
+            FROM announcements
+            ORDER BY id DESC
+            LIMIT 20
+            """
+        ).fetchall()
+
+        data = []
+
+        for row in rows:
+
+            item = {}
+
+            for key in row.keys():
+                item[key] = row[key]
+
+            data.append(item)
+
+        conn.close()
+
+        return jsonify({
+            "success": True,
+            "announcements": data
+        })
+
+    except Exception:
+
+        conn.close()
+
+        return jsonify({
+            "success": True,
+            "announcements": []
+        })
