@@ -609,7 +609,27 @@ const initData =
 
 const user =
     tg.initDataUnsafe?.user;
+// ==========================================
+// REFERRAL ID
+// ==========================================
 
+let referrerId = null;
+
+const startParam =
+    tg.initDataUnsafe?.start_param;
+
+if (startParam) {
+
+    const parsed =
+        parseInt(startParam, 10);
+
+    if (
+        Number.isInteger(parsed) &&
+        parsed > 0
+    ) {
+        referrerId = parsed;
+    }
+}
 
 const balanceEl =
     document.getElementById("balance");
@@ -678,7 +698,9 @@ async function loadAccount(){
                     },
 
                     body: JSON.stringify({
-                        initData: initData
+                    initData: initData,
+                    referrer_id: referrerId
+         })
                     })
                 }
             );
