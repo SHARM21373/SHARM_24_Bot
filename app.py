@@ -1,7 +1,7 @@
 import os
-import asyncio
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from telegram import Update
 
 from database import init_db
@@ -11,7 +11,22 @@ from bot import application
 
 app = Flask(__name__)
 
+# Allow requests from your GitHub Pages Mini App
+CORS(
+    app,
+    resources={
+        r"/api/*": {
+            "origins": [
+                "https://sharm21373.github.io"
+            ]
+        }
+    }
+)
+
+# Initialize database
 init_db()
+
+# Register API routes
 app.register_blueprint(routes)
 
 
@@ -20,7 +35,7 @@ def home():
     return jsonify({
         "status": "online",
         "app": "SHARM TAP",
-        "version": "2.0.0"
+        "version": "3.0.0"
     })
 
 
@@ -33,6 +48,7 @@ def health():
 
 @app.post("/webhook")
 async def webhook():
+
     data = request.get_json(silent=True)
 
     if not data:
@@ -60,7 +76,10 @@ async def webhook():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+
+    port = int(
+        os.environ.get("PORT", 5000)
+    )
 
     app.run(
         host="0.0.0.0",
