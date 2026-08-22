@@ -1,1045 +1,928 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0b0f19">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <title>SHARM Mining</title>
+<meta name="theme-color" content="#0b0f19">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+<title>SHARM Mining</title>
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: #0b0f19;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            user-select: none;
-            -webkit-user-select: none;
-        }
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-        button {
-            font-family: inherit;
-        }
+<style>
 
-        .app {
-            width: 100%;
-            max-width: 520px;
-            min-height: 100vh;
-            margin: auto;
-            padding: 18px 16px 35px;
-        }
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
-        /* HEADER */
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #0b0f19;
+    color: white;
+    font-family: Arial, sans-serif;
+    user-select: none;
+}
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+.app {
+    width: 100%;
+    max-width: 520px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 18px 16px 90px;
+}
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-        }
+/* TOP */
 
-        .brand-icon {
-            font-size: 29px;
-        }
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
 
-        .brand-name {
-            font-size: 20px;
-            font-weight: bold;
-        }
+.username {
+    font-size: 17px;
+    font-weight: bold;
+}
 
-        .online {
-            padding: 6px 10px;
-            border-radius: 20px;
-            background: #13251a;
-            color: #4ade80;
-            font-size: 11px;
-        }
+.account-id {
+    margin-top: 4px;
+    color: #8f99aa;
+    font-size: 11px;
+}
 
-        /* BALANCE */
+.balance {
+    text-align: right;
+}
 
-        .balance-card {
-            padding: 23px 18px;
-            border-radius: 21px;
-            text-align: center;
-            background: #151b29;
-            border: 1px solid #252d3d;
-        }
+.balance-value {
+    font-size: 22px;
+    font-weight: bold;
+}
 
-        .balance-label {
-            color: #9ca3af;
-            font-size: 13px;
-        }
+.balance-name {
+    margin-top: 3px;
+    color: #8f99aa;
+    font-size: 10px;
+}
 
-        #points {
-            margin: 9px 0 3px;
-            font-size: 40px;
-            font-weight: bold;
-        }
+/* MINE */
 
-        .coin-name {
-            color: #9ca3af;
-            font-size: 13px;
-        }
+.mine {
+    position: relative;
+    height: 430px;
 
-        /* BATTERY */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .battery-section {
-            margin-top: 18px;
-            padding: 18px;
-            border-radius: 18px;
-            background: #151b29;
-            border: 1px solid #252d3d;
-        }
+.tap-area {
+    text-align: center;
+}
 
-        .battery-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
+.tap-button {
+    width: 190px;
+    height: 190px;
 
-        .battery-label {
-            color: #cbd5e1;
-        }
+    border: 8px solid #252d3d;
+    border-radius: 50%;
 
-        #batteryText {
-            color: #60a5fa;
-            font-weight: bold;
-        }
+    background: #5865f2;
+    color: white;
 
-        .battery-track {
-            width: 100%;
-            height: 13px;
-            overflow: hidden;
-            border-radius: 20px;
-            background: #252d3d;
-        }
+    font-size: 22px;
+    font-weight: bold;
 
-        #batteryBar {
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-            background: #4ade80;
-            transition: width 0.3s;
-        }
+    touch-action: manipulation;
 
-        .recharge {
-            margin-top: 9px;
-            color: #9ca3af;
-            font-size: 11px;
-            text-align: center;
-        }
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.35);
 
-        /* TAP */
+    transition:
+        transform .08s,
+        opacity .2s;
+}
 
-        .tap-section {
-            margin-top: 23px;
-            text-align: center;
-        }
+.tap-button:active {
+    transform: scale(.93);
+}
 
-        .rate {
-            margin-bottom: 15px;
-            color: #9ca3af;
-            font-size: 13px;
-        }
+.tap-button.disabled {
+    opacity: .45;
+}
 
-        #tapButton {
-            width: 190px;
-            height: 190px;
-            border: 8px solid #252d3d;
-            border-radius: 50%;
-            background: #5865f2;
-            color: #fff;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            touch-action: manipulation;
-            box-shadow: 0 12px 35px rgba(0,0,0,.35);
-            transition: transform .08s, opacity .2s;
-        }
+.tap-caption {
+    margin-top: 14px;
+    color: #8f99aa;
+    font-size: 12px;
+}
 
-        #tapButton:active {
-            transform: scale(.93);
-        }
+/* STATUS */
 
-        #tapButton.disabled {
-            opacity: .45;
-            cursor: not-allowed;
-        }
+.status {
+    position: absolute;
+    right: 0;
+    bottom: 60px;
 
-        .tap-help {
-            margin-top: 13px;
-            color: #9ca3af;
-            font-size: 12px;
-        }
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
-        /* PENDING */
+.status-item {
+    padding: 7px 10px;
 
-        .pending {
-            margin-top: 18px;
-            padding: 13px;
-            border-radius: 13px;
-            text-align: center;
-            background: #151b29;
-            border: 1px solid #252d3d;
-            color: #cbd5e1;
-            font-size: 13px;
-        }
+    border-radius: 10px;
 
-        #pendingPoints {
-            color: #60a5fa;
-            font-weight: bold;
-        }
+    background: #151b29;
+    border: 1px solid #252d3d;
 
-        /* GRID */
+    color: #cbd5e1;
 
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 22px;
-        }
+    font-size: 12px;
+}
 
-        .card {
-            padding: 17px;
-            border-radius: 17px;
-            background: #151b29;
-            border: 1px solid #252d3d;
-        }
+.status-item strong {
+    color: #60a5fa;
+}
 
-        .icon {
-            font-size: 25px;
-        }
+/* PAGES */
 
-        .title {
-            margin-top: 8px;
-            font-size: 14px;
-            font-weight: bold;
-        }
+.page {
+    display: none;
+}
 
-        .value {
-            margin-top: 5px;
-            color: #9ca3af;
-            font-size: 12px;
-        }
+.page.active {
+    display: block;
+}
 
-        .card button {
-            width: 100%;
-            margin-top: 11px;
-            padding: 9px;
-            border: 0;
-            border-radius: 9px;
-            background: #252d3d;
-            color: white;
-            cursor: pointer;
-        }
+.simple {
+    padding-top: 40px;
+    text-align: center;
+}
 
-        /* AIRDROP */
+.simple h2 {
+    font-size: 23px;
+}
 
-        .airdrop {
-            margin-top: 12px;
-            padding: 18px;
-            border-radius: 17px;
-            background: #151b29;
-            border: 1px solid #252d3d;
-        }
+.simple p {
+    color: #9ca3af;
+    font-size: 13px;
+}
 
-        .airdrop-head {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-        }
+/* SETTINGS */
 
-        #airdropPercent {
-            color: #60a5fa;
-        }
+.setting {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
-        .progress {
-            height: 10px;
-            margin-top: 13px;
-            overflow: hidden;
-            border-radius: 20px;
-            background: #252d3d;
-        }
+    margin-top: 10px;
+    padding: 15px;
 
-        #progressBar {
-            width: 0%;
-            height: 100%;
-            border-radius: 20px;
-            background: #5865f2;
-            transition: width .3s;
-        }
+    border-radius: 14px;
 
-        .airdrop-info {
-            margin-top: 8px;
-            color: #9ca3af;
-            font-size: 11px;
-        }
+    background: #151b29;
+    border: 1px solid #252d3d;
 
-        /* POPUP */
+    text-align: left;
+}
 
-        .popup {
-            position: fixed;
-            inset: 0;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: rgba(0,0,0,.72);
-            z-index: 100;
-        }
+.setting-icon {
+    font-size: 24px;
+}
 
-        .popup.show {
-            display: flex;
-        }
+.setting-title {
+    font-weight: bold;
+    font-size: 14px;
+}
 
-        .popup-box {
-            width: 100%;
-            max-width: 380px;
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            background: #151b29;
-            border: 1px solid #252d3d;
-        }
+.setting-sub {
+    margin-top: 4px;
+    color: #8f99aa;
+    font-size: 11px;
+}
 
-        .popup-icon {
-            font-size: 40px;
-        }
+/* NAV */
 
-        .popup-title {
-            margin-top: 9px;
-            font-size: 21px;
-            font-weight: bold;
-        }
+.bottom-nav {
+    position: fixed;
 
-        .popup-text {
-            margin-top: 9px;
-            color: #9ca3af;
-            font-size: 14px;
-            line-height: 1.5;
-            word-break: break-word;
-        }
+    left: 50%;
+    bottom: 0;
 
-        .close {
-            width: 100%;
-            margin-top: 18px;
-            padding: 12px;
-            border: 0;
-            border-radius: 10px;
-            background: #5865f2;
-            color: white;
-            font-weight: bold;
-        }
+    transform: translateX(-50%);
 
-        .toast {
-            position: fixed;
-            left: 50%;
-            bottom: 22px;
-            transform: translateX(-50%);
-            display: none;
-            padding: 10px 15px;
-            border-radius: 11px;
-            background: #252d3d;
-            color: white;
-            font-size: 13px;
-            z-index: 200;
-        }
+    width: 100%;
+    max-width: 520px;
 
-        .toast.show {
-            display: block;
-        }
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
 
-        @media (max-width: 360px) {
-            #tapButton {
-                width: 165px;
-                height: 165px;
-            }
+    padding: 9px 6px 11px;
 
-            #points {
-                font-size: 35px;
-            }
-        }
-    </style>
+    background: #111722;
+    border-top: 1px solid #252d3d;
+
+    z-index: 50;
+}
+
+.nav {
+    border: 0;
+    background: transparent;
+    color: #788397;
+
+    padding: 5px 2px;
+}
+
+.nav.active {
+    color: white;
+}
+
+.nav-icon {
+    display: block;
+    font-size: 21px;
+}
+
+.nav-text {
+    display: block;
+    margin-top: 4px;
+    font-size: 10px;
+}
+
+/* SMALL SCREEN */
+
+@media(max-width:360px) {
+
+    .tap-button {
+        width: 165px;
+        height: 165px;
+        font-size: 19px;
+    }
+
+    .mine {
+        height: 390px;
+    }
+
+    .balance-value {
+        font-size: 19px;
+    }
+}
+
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-    <!-- HEADER -->
+<!-- TAP -->
 
-    <div class="header">
+<section id="tapPage" class="page active">
 
-        <div class="brand">
-            <div class="brand-icon">⛏️</div>
-            <div class="brand-name">SHARM Mining</div>
-        </div>
+    <div class="top">
 
-        <div class="online">
-            ● Online
-        </div>
-
-    </div>
-
-
-    <!-- POINTS -->
-
-    <div class="balance-card">
-
-        <div class="balance-label">
-            SHARM Points
-        </div>
-
-        <div id="points">
-            0
-        </div>
-
-        <div class="coin-name">
-            Mining Points
-        </div>
-
-    </div>
-
-
-    <!-- BATTERY -->
-
-    <div class="battery-section">
-
-        <div class="battery-header">
-
-            <span class="battery-label">
-                🔋 Battery
-            </span>
-
-            <span id="batteryText">
-                1500 / 1500
-            </span>
-
-        </div>
-
-        <div class="battery-track">
-
-            <div id="batteryBar"></div>
-
-        </div>
-
-        <div class="recharge">
-            ⚡ Battery recharges automatically
-        </div>
-
-    </div>
-
-
-    <!-- TAP -->
-
-    <div class="tap-section">
-
-        <div class="rate">
-            ⚡ 1 Point per Tap • 3 sec processing
-        </div>
-
-        <button id="tapButton">
-            ⛏️ TAP
-        </button>
-
-        <div class="tap-help">
-            One valid touch = one Battery
-        </div>
-
-    </div>
-
-
-    <!-- PENDING -->
-
-    <div class="pending">
-
-        ⏳ Pending Points:
-        <span id="pendingPoints">0</span>
-
-    </div>
-
-
-    <!-- FEATURES -->
-
-    <div class="grid">
-
-        <div class="card">
-
-            <div class="icon">🎁</div>
-
-            <div class="title">
-                Daily Reward
+        <div>
+            <div id="username"
+                 class="username">
+                👤 Telegram User
             </div>
 
-            <div id="dailyStatus" class="value">
-                Available
+            <div id="accountId"
+                 class="account-id">
+                SHARM Mining
+            </div>
+        </div>
+
+        <div class="balance">
+
+            <div id="balance"
+                 class="balance-value">
+                0
             </div>
 
-            <button id="dailyButton">
-                Claim
+            <div class="balance-name">
+                SHARM POINTS
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="mine">
+
+        <div class="tap-area">
+
+            <button id="tapButton"
+                    class="tap-button">
+
+                ⛏️ TAP MINE
+
             </button>
 
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">👥</div>
-
-            <div class="title">
-                Referral
+            <div class="tap-caption">
+                +1 SHARM Point
             </div>
-
-            <div id="referralValue" class="value">
-                0 Friends
-            </div>
-
-            <button id="referralButton">
-                Invite
-            </button>
 
         </div>
 
 
-        <div class="card">
+        <div class="status">
 
-            <div class="icon">🏆</div>
-
-            <div class="title">
-                Leaderboard
+            <div class="status-item">
+                🔋 Battery:
+                <strong id="battery">
+                    1500
+                </strong>
+                / 1500
             </div>
 
-            <div class="value">
-                View ranking
+            <div class="status-item">
+                ⏳ Processing:
+                <strong id="processing">
+                    0
+                </strong>
             </div>
-
-            <button id="leaderboardButton">
-                Open
-            </button>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="icon">⚡</div>
-
-            <div class="title">
-                Mining Rate
-            </div>
-
-            <div class="value">
-                +1 Point / Tap
-            </div>
-
-            <button id="upgradeButton">
-                Upgrade
-            </button>
 
         </div>
 
     </div>
 
+</section>
 
-    <!-- AIRDROP -->
 
-    <div class="airdrop">
+<!-- REFER -->
 
-        <div class="airdrop-head">
+<section id="referPage"
+         class="page">
 
-            <strong>
-                🪂 Airdrop Progress
-            </strong>
+    <div class="simple">
 
-            <span id="airdropPercent">
-                0%
-            </span>
+        <h2>👥 Referral</h2>
+
+        <p id="referrals">
+            Friends: 0
+        </p>
+
+        <p>
+            Referral system will be connected here.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- LEADERBOARD -->
+
+<section id="leaderPage"
+         class="page">
+
+    <div class="simple">
+
+        <h2>🏆 Leaderboard</h2>
+
+        <p>
+            Leaderboard will be connected here.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- MORE -->
+
+<section id="morePage"
+         class="page">
+
+    <div class="simple">
+
+        <h2>⚙️ More</h2>
+
+
+        <div class="setting">
+
+            <div class="setting-icon">👤</div>
+
+            <div>
+                <div class="setting-title">
+                    Account
+                </div>
+
+                <div class="setting-sub">
+                    Telegram account
+                </div>
+            </div>
 
         </div>
 
-        <div class="progress">
 
-            <div id="progressBar"></div>
+        <div class="setting">
+
+            <div class="setting-icon">🔐</div>
+
+            <div>
+                <div class="setting-title">
+                    Telegram Access
+                </div>
+
+                <div class="setting-sub">
+                    Mini App session
+                </div>
+            </div>
 
         </div>
 
-        <div id="airdropInfo" class="airdrop-info">
-            0 / 10000 Points
+
+        <div class="setting">
+
+            <div class="setting-icon">🎵</div>
+
+            <div>
+                <div class="setting-title">
+                    TikTok
+                </div>
+
+                <div class="setting-sub">
+                    Tasks and rewards
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-icon">▶️</div>
+
+            <div>
+                <div class="setting-title">
+                    YouTube
+                </div>
+
+                <div class="setting-sub">
+                    Tasks and rewards
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-icon">𝕏</div>
+
+            <div>
+                <div class="setting-title">
+                    X
+                </div>
+
+                <div class="setting-sub">
+                    Tasks and rewards
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-icon">🪂</div>
+
+            <div>
+                <div class="setting-title">
+                    Airdrop
+                </div>
+
+                <div class="setting-sub">
+                    Future SHARM allocation
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-icon">🎁</div>
+
+            <div>
+                <div class="setting-title">
+                    Daily Reward
+                </div>
+
+                <div class="setting-sub">
+                    Coming soon
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-icon">❓</div>
+
+            <div>
+                <div class="setting-title">
+                    Support
+                </div>
+
+                <div class="setting-sub">
+                    SHARM Support
+                </div>
+            </div>
+
         </div>
 
     </div>
+
+</section>
 
 </div>
 
 
-<!-- POPUP -->
+<!-- NAV -->
 
-<div id="popup" class="popup">
+<nav class="bottom-nav">
 
-    <div class="popup-box">
+    <button class="nav active"
+            data-page="tapPage">
 
-        <div id="popupIcon" class="popup-icon">
-            ⛏️
-        </div>
+        <span class="nav-icon">⛏️</span>
+        <span class="nav-text">Tap</span>
 
-        <div id="popupTitle" class="popup-title">
-            SHARM Mining
-        </div>
-
-        <div id="popupText" class="popup-text">
-            Welcome to SHARM Mining.
-        </div>
-
-        <button id="closePopup" class="close">
-            Close
-        </button>
-
-    </div>
-
-</div>
+    </button>
 
 
-<div id="toast" class="toast">
-    +1 SHARM Point
-</div>
+    <button class="nav"
+            data-page="referPage">
+
+        <span class="nav-icon">👥</span>
+        <span class="nav-text">Refer</span>
+
+    </button>
+
+
+    <button class="nav"
+            data-page="leaderPage">
+
+        <span class="nav-icon">🏆</span>
+        <span class="nav-text">Leader</span>
+
+    </button>
+
+
+    <button class="nav"
+            data-page="morePage">
+
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-text">More</span>
+
+    </button>
+
+</nav>
 
 
 <script>
 
-    /* =========================
-       SETTINGS
-    ========================== */
+const API_URL =
+    "https://sharm-backend.onrender.com";
 
-    const MAX_BATTERY = 1500;
+const tg =
+    window.Telegram.WebApp;
 
-    const POINT_PER_TAP = 1;
-
-    const PROCESSING_TIME = 3000;
-
-    /*
-       Recharge:
-       1 Battery every 60 seconds.
-       This can later be controlled
-       from the Admin Panel.
-    */
-    const RECHARGE_TIME = 60000;
-
-    const AIRDROP_TARGET = 10000;
+tg.ready();
+tg.expand();
 
 
-    /* =========================
-       STORAGE
-    ========================== */
-
-    const POINTS_KEY = "sharmPoints";
-
-    const BATTERY_KEY = "sharmBattery";
-
-    const PENDING_KEY = "sharmPending";
-
-    const LAST_RECHARGE_KEY = "sharmLastRecharge";
-
-    const DAILY_KEY = "sharmDailyReward";
-
-    const REFERRAL_KEY = "sharmReferrals";
+const initData =
+    tg.initData;
 
 
-    /* =========================
-       ELEMENTS
-    ========================== */
-
-    const pointsEl =
-        document.getElementById("points");
-
-    const batteryText =
-        document.getElementById("batteryText");
-
-    const batteryBar =
-        document.getElementById("batteryBar");
-
-    const tapButton =
-        document.getElementById("tapButton");
-
-    const pendingEl =
-        document.getElementById("pendingPoints");
-
-    const airdropPercent =
-        document.getElementById("airdropPercent");
-
-    const progressBar =
-        document.getElementById("progressBar");
-
-    const airdropInfo =
-        document.getElementById("airdropInfo");
-
-    const dailyButton =
-        document.getElementById("dailyButton");
-
-    const dailyStatus =
-        document.getElementById("dailyStatus");
-
-    const referralValue =
-        document.getElementById("referralValue");
-
-    const referralButton =
-        document.getElementById("referralButton");
-
-    const leaderboardButton =
-        document.getElementById("leaderboardButton");
-
-    const upgradeButton =
-        document.getElementById("upgradeButton");
-
-    const popup =
-        document.getElementById("popup");
-
-    const popupIcon =
-        document.getElementById("popupIcon");
-
-    const popupTitle =
-        document.getElementById("popupTitle");
-
-    const popupText =
-        document.getElementById("popupText");
-
-    const closePopup =
-        document.getElementById("closePopup");
-
-    const toast =
-        document.getElementById("toast");
+const user =
+    tg.initDataUnsafe?.user;
 
 
-    /* =========================
-       STORAGE HELPERS
-    ========================== */
+const balanceEl =
+    document.getElementById("balance");
 
-    function getPoints() {
+const batteryEl =
+    document.getElementById("battery");
 
-        return Number(
-            localStorage.getItem(POINTS_KEY)
-        ) || 0;
+const processingEl =
+    document.getElementById("processing");
 
+const usernameEl =
+    document.getElementById("username");
+
+const accountIdEl =
+    document.getElementById("accountId");
+
+const referralsEl =
+    document.getElementById("referrals");
+
+const tapButton =
+    document.getElementById("tapButton");
+
+
+/* USER */
+
+if(user){
+
+    const name =
+        user.username
+        ? "@" + user.username
+        : user.first_name
+          || "Telegram User";
+
+    usernameEl.textContent =
+        "👤 " + name;
+
+    accountIdEl.textContent =
+        "Telegram ID: " + user.id;
+
+}
+
+
+/* LOAD ACCOUNT */
+
+async function loadAccount(){
+
+    if(!initData){
+
+        usernameEl.textContent =
+            "👤 Open inside Telegram";
+
+        return;
     }
 
+    try{
 
-    function setPoints(value) {
+        const response =
+            await fetch(
+                API_URL + "/api/me",
+                {
+                    method: "POST",
 
-        localStorage.setItem(
-            POINTS_KEY,
-            Math.max(0, Math.floor(value))
-        );
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
 
-    }
+                    body: JSON.stringify({
+                        initData: initData
+                    })
+                }
+            );
 
 
-    function getBattery() {
+        const data =
+            await response.json();
 
-        const saved =
-            localStorage.getItem(BATTERY_KEY);
 
-        if (saved === null) {
-            return MAX_BATTERY;
+        if(!data.success){
+
+            console.error(data.error);
+            return;
         }
 
-        return Math.min(
-            MAX_BATTERY,
-            Math.max(0, Number(saved))
+
+        balanceEl.textContent =
+            Number(
+                data.balance || 0
+            ).toLocaleString();
+
+
+        batteryEl.textContent =
+            Number(
+                data.battery || 0
+            ).toLocaleString();
+
+
+        referralsEl.textContent =
+            "Friends: " +
+            Number(
+                data.referrals || 0
+            ).toLocaleString();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Account error:",
+            error
         );
 
     }
 
+}
 
-    function setBattery(value) {
 
-        localStorage.setItem(
-            BATTERY_KEY,
-            Math.min(
-                MAX_BATTERY,
-                Math.max(0, Math.floor(value))
-            )
-        );
+/* TAP */
 
+let tapping = false;
+
+
+async function tapMine(){
+
+    if(tapping){
+        return;
     }
 
+    tapping = true;
 
-    function getPending() {
+    try{
 
-        return Number(
-            localStorage.getItem(PENDING_KEY)
-        ) || 0;
+        const response =
+            await fetch(
+                API_URL + "/api/tap",
+                {
+                    method: "POST",
 
-    }
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
 
-
-    function setPending(value) {
-
-        localStorage.setItem(
-            PENDING_KEY,
-            Math.max(0, Math.floor(value))
-        );
-
-    }
-
-
-    /* =========================
-       DASHBOARD
-    ========================== */
-
-    function updateDashboard() {
-
-        const points =
-            getPoints();
-
-        const battery =
-            getBattery();
-
-        const pending =
-            getPending();
-
-        pointsEl.textContent =
-            points.toLocaleString();
-
-        batteryText.textContent =
-            battery.toLocaleString()
-            + " / "
-            + MAX_BATTERY.toLocaleString();
-
-        const batteryPercent =
-            (battery / MAX_BATTERY) * 100;
-
-        batteryBar.style.width =
-            batteryPercent + "%";
-
-        pendingEl.textContent =
-            pending.toLocaleString();
-
-        if (battery <= 0) {
-
-            tapButton.disabled = true;
-
-            tapButton.classList.add(
-                "disabled"
-            );
-
-            tapButton.textContent =
-                "🔋 EMPTY";
-
-        } else {
-
-            tapButton.disabled = false;
-
-            tapButton.classList.remove(
-                "disabled"
-            );
-
-            tapButton.textContent =
-                "⛏️ TAP";
-
-        }
-
-        updateAirdrop(points);
-
-    }
-
-
-    /* =========================
-       TAP
-    ========================== */
-
-    let tapLocked = false;
-
-    let lastTapTime = 0;
-
-
-    tapButton.addEventListener(
-        "pointerdown",
-        function(event) {
-
-            /*
-             * Prevent multiple simultaneous
-             * touches from creating multiple
-             * rewards.
-             */
-
-            event.preventDefault();
-
-            const now =
-                Date.now();
-
-            /*
-             * One valid tap at a time.
-             */
-
-            if (tapLocked) {
-                return;
-            }
-
-            /*
-             * Small anti-double-trigger
-             * protection.
-             */
-
-            if (
-                now - lastTapTime < 250
-            ) {
-                return;
-            }
-
-            const battery =
-                getBattery();
-
-            if (battery <= 0) {
-
-                updateDashboard();
-
-                showToast(
-                    "🔋 Battery empty"
-                );
-
-                return;
-            }
-
-            tapLocked = true;
-
-            lastTapTime = now;
-
-
-            /* Battery -1 */
-
-            setBattery(
-                battery - 1
+                    body: JSON.stringify({
+                        initData: initData
+                    })
+                }
             );
 
 
-            /* Pending +1 */
-
-            setPending(
-                getPending()
-                + POINT_PER_TAP
-            );
-
-            updateDashboard();
-
-            showToast(
-                "🔋 -1 • ⏳ +1 pending"
-            );
+        const data =
+            await response.json();
 
 
-            /*
-             * Point arrives after
-             * 3 seconds.
-             */
+        if(!data.success){
 
-            setTimeout(
-                function() {
-
-                    const pending =
-                        getPending();
-
-                    if (pending > 0) {
-
-                        setPending(
-                            pending - 1
-                        );
-
-                        setPoints(
-                            getPoints()
-                            + POINT_PER_TAP
-                        );
-
-                        updateDashboard();
-
-                        showToast(
-                            "💰 +1 SHARM Point"
-                        );
-
-                    }
-
-                },
-                PROCESSING_TIME
-            );
-
-
-            /*
-             * Release lock shortly after
-             * the physical tap.
-             */
-
-            setTimeout(
-                function() {
-
-                    tapLocked = false;
-
-                },
-                250
-            );
-
-        },
-        {
-            passive: false
-        }
-    );
-
-
-    /* =========================
-       BATTERY RECHARGE
-    ========================== */
-
-    function rechargeBattery() {
-
-        let battery =
-            getBattery();
-
-        if (battery >= MAX_BATTERY) {
-
-            localStorage.setItem(
-                LAST_RECHARGE_KEY,
-                Date.now()
+            alert(
+                data.error ||
+                "Tap failed"
             );
 
             return;
-
         }
 
 
-        let lastRecharge =
+        /* Battery immediately decreases */
+
+        batteryEl.textContent =
             Number(
-                localStorage.getItem(
-                    LAST_RECHARGE_KEY
-                )
-            ) || Date.now();
+                data.battery
+            ).toLocaleString();
 
 
-        const elapsed =
-            Date.now() - lastRecharge;
+        /* Coin is pending for 3 seconds */
 
-
-        const rechargeCount =
-            Math.floor(
-                elapsed / RECHARGE_TIME
+        processingEl.textContent =
+            Number(
+                data.pending || 0
             );
 
 
-        if (rechargeCount > 0) {
+        setTimeout(
+            async function(){
 
-            battery =
-                Math.min(
-                    MAX_BATTERY,
-                    battery + rechargeCount
+                await loadAccount();
+
+            },
+            3100
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Tap error:",
+            error
+        );
+
+        alert(
+            "Connection error"
+        );
+
+    }
+
+    finally{
+
+        setTimeout(
+            function(){
+
+                tapping = false;
+
+            },
+            250
+        );
+
+    }
+
+}
+
+
+tapButton.addEventListener(
+    "pointerdown",
+    function(event){
+
+        event.preventDefault();
+
+        tapMine();
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+/* NAVIGATION */
+
+const navs =
+    document.querySelectorAll(
+        ".nav"
+    );
+
+const pages =
+    document.querySelectorAll(
+        ".page"
+    );
+
+
+navs.forEach(
+    function(nav){
+
+        nav.addEventListener(
+            "click",
+            function(){
+
+                const id =
+                    nav.dataset.page;
+
+
+                pages.forEach(
+                    function(page){
+
+                        page.classList.remove(
+                            "active"
+                        );
+
+                    }
                 );
 
 
-           
+                navs.forEach(
+                    function(item){
+
+                        item.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                document
+                    .getElementById(id)
+                    .classList.add(
+                        "active"
+                    );
+
+
+                nav.classList.add(
+                    "active"
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* REFRESH ACCOUNT */
+
+setInterval(
+    loadAccount,
+    5000
+);
+
+
+/* START */
+
+loadAccount();
+
+</script>
+
+</body>
+    </html>
