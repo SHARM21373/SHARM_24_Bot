@@ -104,6 +104,8 @@ def status():
 def get_me():
 
     body = request.get_json(silent=True) or {}
+    
+    referrer_id = body.get("referrer_id")
 
     telegram_user = verify_telegram_init_data(
         body.get("initData", "")
