@@ -125,6 +125,10 @@ def init_db():
         tap_power INTEGER DEFAULT 1,
 
         mine_level INTEGER DEFAULT 1,
+        
+       referred_by INTEGER DEFAULT NULL,
+
+      referral_rewarded INTEGER DEFAULT 0,
 
         referrals INTEGER DEFAULT 0,
 
