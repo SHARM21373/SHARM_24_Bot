@@ -712,7 +712,22 @@ async function loadAccount(){
             Number(
                 data.referrals || 0
             ).toLocaleString();
+        
+      if (data.user){
 
+        const backendUser = data.user;
+        const name =
+        backendUser.username
+        ? "@" + backendUser.username
+        : backendUser.first_name || "Telegram User";
+
+    usernameEl.textContent =
+        "👤 " + name;
+
+    accountIdEl.textContent =
+        "Telegram ID: " +
+        backendUser.telegram_id;
+          }
     }
 
     catch(error){
