@@ -880,65 +880,64 @@ tapButton.addEventListener(
 /* NAVIGATION */
 
 const navs =
-    document.querySelectorAll(
-        ".nav"
-    );
+    document.querySelectorAll(".nav");
 
 const pages =
-    document.querySelectorAll(
-        ".page"
-    );
+    document.querySelectorAll(".page");
 
 
-navs.forEach(
-    function(nav){
+navs.forEach(function(nav) {
 
-        nav.addEventListener(
-            "click",
-            function(){
+    nav.addEventListener("click", function() {
 
-                const id =
-                    nav.dataset.page;
+        const id =
+            nav.dataset.page;
 
-
-                pages.forEach(
-                    function(page){
-
-                        page.classList.remove(
-                            "active"
-                        );
-
-                    }
-                );
+        const targetPage =
+            document.getElementById(id);
 
 
-                navs.forEach(
-                    function(item){
+        if (!targetPage) {
 
-                        item.classList.remove(
-                            "active"
-                        );
+            console.error(
+                "Page not found:",
+                id
+            );
 
-                    }
-                );
-
-
-                document
-                    .getElementById(id)
-                    .classList.add(
-                        "active"
-                    );
+            return;
+        }
 
 
-                nav.classList.add(
-                    "active"
-                );
+        pages.forEach(function(page) {
 
-            }
+            page.classList.remove(
+                "active"
+            );
+
+        });
+
+
+        navs.forEach(function(item) {
+
+            item.classList.remove(
+                "active"
+            );
+
+        });
+
+
+        targetPage.classList.add(
+            "active"
         );
 
-    }
-);
+
+        nav.classList.add(
+            "active"
+        );
+
+    });
+
+});
 
 
 /* REFRESH ACCOUNT */
