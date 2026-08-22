@@ -326,7 +326,7 @@ def init_db():
    # ======================================
    # USERS DATABASE MIGRATION
    # ======================================
-  columns = [ 
+  columns = [
       row[1]
      for row in cursor.execute(
       "PRAGMA table_info(users)"
