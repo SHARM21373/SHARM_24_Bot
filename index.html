@@ -684,25 +684,32 @@ async function loadAccount(){
         return;
     }
 
-    try{
+    try {
 
-        const response =
-            await fetch(
-                API_URL + "/api/me",
-                {
-                    method: "POST",
+    const response =
+        await fetch(
+            API_URL + "/api/me",
+            {
+                method: "POST",
 
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-                    body: JSON.stringify({
+                body: JSON.stringify({
                     initData: initData,
                     referrer_id: referrerId
-         })
-                    })
-                }
+                })
+            }
+        );
+
+    const data =
+        await response.json();
+
+    if (!data.success) {
+        console.error(data.error);
+        return;
+    }
             );
 
 
