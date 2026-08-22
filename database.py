@@ -278,8 +278,7 @@ def init_db():
 
     )
     """)
-
-
+    
     # ======================================
     # USER UPGRADES
     # ======================================
@@ -327,13 +326,14 @@ def init_db():
    # ======================================
    # USERS DATABASE MIGRATION
    # ======================================
+  columns = [ 
+      row[1]
+     for row in cursor.execute(
+      "PRAGMA table_info(users)"
+    ).fetchall()
+   ]
 
-columns = [
-    row[1]
-    for row in cursor.execute("PRAGMA table_info(users)").fetchall()
-]
-
-if "referred_by" not in columns:
+   if "referred_by" not in columns:
     cursor.execute(
         "ALTER TABLE users ADD COLUMN referred_by INTEGER DEFAULT NULL"
     )
