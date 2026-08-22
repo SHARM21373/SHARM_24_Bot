@@ -710,21 +710,8 @@ async function loadAccount(){
         console.error(data.error);
         return;
     }
-            );
 
-
-        const data =
-            await response.json();
-
-
-        if(!data.success){
-
-            console.error(data.error);
-            return;
-        }
-
-
-        balanceEl.textContent =
+           balanceEl.textContent =
             Number(
                 data.balance || 0
             ).toLocaleString();
