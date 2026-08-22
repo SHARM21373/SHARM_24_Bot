@@ -1,34 +1,118 @@
 import os
-import sqlite3
+
+# =====================================
+# Application
+# =====================================
+
+APP_NAME = "SHARM Mining"
+APP_VERSION = "1.0.0"
+
+# =====================================
+# Telegram
+# =====================================
+
+BOT_TOKEN = os.getenv("BOT_TOKEN", "")
+
+# =====================================
+# Database
+# =====================================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 DATA_DIR = os.path.join(BASE_DIR, "data")
-DATABASE = os.path.join(DATA_DIR, "sharm.db")
+
+DATABASE_PATH = os.path.join(DATA_DIR, "sharm.db")
+
+# =====================================
+# Mining
+# =====================================
+
+DEFAULT_BALANCE = 0
+
+DEFAULT_BATTERY = 1500
+
+MAX_BATTERY = 1500
+
+POINT_PER_TAP = 1
+
+PROCESSING_SECONDS = 3
+
+BATTERY_RECHARGE_SECONDS = 60
+
+# =====================================
+# Referral
+# =====================================
+
+REFERRAL_REWARD = 100
+
+# =====================================
+# Security
+# =====================================
+
+REQUEST_LIMIT_PER_SECOND = 5
+
+# =====================================
+# UI
+# =====================================
+
+APP_THEME = "dark"
+
+COIN_NAME = "SHARM"
+
+# =====================================
+# Future Features
+# =====================================
+
+ENABLE_AIRDROP = False
+
+ENABLE_TOKEN = False
+
+ENABLE_WITHDRAW = False
+
+ENABLE_UPGRADE = False
+# ======================================
+# SHOP UPGRADES
+# ======================================
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS shop_upgrades (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    name TEXT NOT NULL,
+
+    description TEXT,
+
+    price INTEGER NOT NULL,
+
+    effect_type TEXT,
+
+    effect_value INTEGER,
+
+    max_level INTEGER DEFAULT 10,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+)
+""")
 
 
-def get_connection():
-    os.makedirs(DATA_DIR, exist_ok=True)
+# ======================================
+# USER UPGRADES
+# ======================================
 
-    conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row
-    return conn
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS user_upgrades (
 
+    telegram_id INTEGER NOT NULL,
 
-def init_db():
-    conn = get_connection()
-    cursor = conn.cursor()
+    upgrade_name TEXT NOT NULL,
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            telegram_id INTEGER PRIMARY KEY,
-            username TEXT,
-            first_name TEXT,
-            coins INTEGER DEFAULT 0,
-            energy INTEGER DEFAULT 1000,
-            referrals INTEGER DEFAULT 0,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
+    level INTEGER DEFAULT 1,
 
-    conn.commit()
-    conn.close()
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (telegram_id, upgrade_name)
+
+)
+""")
