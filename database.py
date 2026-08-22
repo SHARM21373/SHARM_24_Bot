@@ -102,6 +102,7 @@ def init_db():
 
     cursor = conn.cursor()
 
+
     # ======================================
     # USERS
     # ======================================
@@ -129,10 +130,123 @@ def init_db():
 
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
     )
     """)
+
+
+    # ======================================
+    # USERS DATABASE MIGRATION
+    # ======================================
+
+    cursor.execute("PRAGMA table_info(users)")
+
+    existing_columns = {
+        row[1]
+        for row in cursor.fetchall()
+    }
+
+
+    # Add missing username column
+    if "username" not in existing_columns:
+
+        cursor.execute("""
+        ALTER TABLE users
+        ADD COLUMN username TEXT DEFAULT ''
+        """)
+
+
+    # Add missing first_name column
+    if "first_name" not in existing_columns:
+
+        cursor.execute("""
+        ALTER TABLE users
+        ADD COLUMN first_name TEXT DEFAULT ''
+        """)
+
+
+    # Add missing balance column
+    if "balance" not in existing_columns:
+
+        cursor.execute("""
+        ALTER TABLE users
+        ADD COLUMN balance INTEGER DEFAULT 0
+        """)
+
+
+    # Add missing battery column
+    if "battery" not in existing_columns:
+
+        cursor.execute("""
+        ALTER TABLE users
+        ADD COLUMN battery INTEGER DEFAULT 1500
+        """)
+
+
+    # Add missing max_battery column
+    if "max_battery" not in existing_columns:
+
+        cursor.execute("""
+        ALTER TABLE users
+        ADD COLUMN max_battery INTEGER DEFAULT 1500
+        """)
+
+
+    # Add missing tap_power column
+    if "tap_power" not in existing_columns:
+
+        cursor.execute("""
+        ALTER TABLE users
+        ADD COLUMN tap_power INTEGER DEFAULT 1
+        """)
+
+
+    # Add missing mine_level column
+    if "mine_level" not in existing_columns:
+
+        cursor.execute("""
+        ALTER TABLE users
+        ADD COLUMN mine_level INTEGER DEFAULT 1
+        """)
+
+
+    # Add missing referrals column
+    if "referrals" not in existing_columns:
+
+        cursor.execute("""
+        ALTER TABLE users
+        ADD COLUMN referrals INTEGER DEFAULT 0
+        """)
+
+
+    # Add missing created_at column
+    if "created_at" not in existing_columns:
+
+        cursor.execute("""
+        ALTER TABLE users
+        ADD COLUMN created_at TIMESTAMP
+        """)
+
+
+    # Add missing updated_at column
+    if "updated_at" not in existing_columns:
+
+        cursor.execute("""
+        ALTER TABLE users
+        ADD COLUMN updated_at TIMESTAMP
+        """)
+
+
+    # Add missing last_login column
+    if "last_login" not in existing_columns:
+
+        cursor.execute("""
+        ALTER TABLE users
+        ADD COLUMN last_login TIMESTAMP
+        """)
 
 
     # ======================================
