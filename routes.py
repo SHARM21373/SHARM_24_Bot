@@ -19,6 +19,18 @@ from config import (
 routes = Blueprint("routes", __name__)
 
 # ==========================================
+# API STATUS
+# ==========================================
+
+@routes.get("/api/status")
+def status():
+    return jsonify({
+        "success": True,
+        "app": APP_NAME,
+        "version": APP_VERSION
+    })
+
+# ==========================================
 # Current User
 # ==========================================
 
