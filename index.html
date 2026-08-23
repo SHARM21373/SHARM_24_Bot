@@ -756,7 +756,52 @@ async function loadAccount(){
     }
 
 }
+/* REFERRALS */
 
+async function loadReferrals() {
+
+    if (!initData) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            API_URL + "/api/referrals",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    initData: initData
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+            console.error(data.error);
+            return;
+        }
+
+        document.getElementById("referralLink").value =
+            data.referral_link;
+
+        referralsEl.textContent =
+            "Friends: " + data.referrals;
+
+    } catch (error) {
+
+        console.error(
+            "Referral error:",
+            error
+        );
+
+    }
+
+}
 
 /* TAP */
 
@@ -951,6 +996,7 @@ setInterval(
 /* START */
 
 loadAccount();
+loadReferrals();
 
 </script>
 
