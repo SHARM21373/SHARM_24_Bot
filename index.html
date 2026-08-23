@@ -22,21 +22,28 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background: linear-gradient(135deg, #141923, #070a10); 
+    background: #070a10 !important; 
     color: white;
     font-family: Arial, sans-serif;
     user-select: none;
 }
 
 .circle-btn, .tap-btn, [class*="circle"], [class*="tap"] {
-    background: radial-gradient(circle, #ffe066 0%, #f5b041 70%, #d4ac0d 100%) !important; 
-    box-shadow: 0 0 25px rgba(245, 176, 65, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.6) !important; 
-    border: 3px solid #f4d03f !important; 
+    width: 220px !important;
+    height: 220px !important;
+    margin: 40px auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important; 
+    background: radial-gradient(circle, #ffe066 0%, #f5b041 60%, #b7861b 100%) !important; 
+    box-shadow: 0 0 30px rgba(245, 176, 65, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.5) !important; 
+    border: 8px double #f4d03f !important; 
     color: #141923 !important; 
     font-weight: bold !important;
 }
-      
 
+      
 .app {
     width: 100%;
     max-width: 520px;
