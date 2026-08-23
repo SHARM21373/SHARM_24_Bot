@@ -386,43 +386,44 @@ body {
 
 
 <!-- REFER -->
-
-<section id="referPage"
-         class="page">
-
+<section id="referPage" class="page">
     <div class="simple">
-
         <h2>👥 Referral</h2>
+        
+        <!-- Total friends count will update here -->
+        <p id="referrals">Friends: 0</p>
 
-        <p id="referrals">
-            Friends: 0
-        </p>
+        <!-- Referral Link Display and Action Buttons -->
+        <div class="referral-container" style="margin: 20px 0;">
+            <input type="text" id="referralLinkInput" readonly value="Loading link..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; background: #111; color: #fff; text-align: center; font-size: 14px; box-sizing: border-box;">
+            
+            <div class="referral-buttons" style="margin-top: 15px; display: flex; gap: 10px;">
+                <button id="copyLinkBtn" style="padding: 12px; background: #2481cc; color: #fff; border: none; border-radius: 8px; cursor: pointer; flex: 1; font-weight: bold; font-size: 14px;">Copy Link</button>
+                <button id="inviteFriendBtn" style="padding: 12px; background: #28a745; color: #fff; border: none; border-radius: 8px; cursor: pointer; flex: 1; font-weight: bold; font-size: 14px;">Invite Friend</button>
+            </div>
+        </div>
 
-        <p>
-            Referral system will be connected here.
-        </p>
-
+        <!-- This box will hold the list of invited friends -->
+        <div id="friendsList" style="margin-top: 20px; text-align: left; max-height: 200px; overflow-y: auto;">
+            <!-- Friends names will be appended here dynamically -->
+        </div>
     </div>
-
 </section>
-
 
 <!-- LEADERBOARD -->
-
-<section id="leaderPage"
-         class="page">
-
+<section id="leaderPage" class="page">
     <div class="simple">
-
         <h2>🏆 Leaderboard</h2>
-
-        <p>
-            Leaderboard will be connected here.
-        </p>
-
+        
+        <!-- This container will hold the Top 10 Users List -->
+        <div id="leaderboardContainer" style="margin-top: 20px; text-align: left;">
+            <ol id="leaderboardList" style="padding-left: 20px; color: #fff; font-size: 16px; line-height: 2;">
+                <!-- Top users rows will be appended here dynamically -->
+            </ol>
+        </div>
     </div>
-
 </section>
+      
 
 
 <!-- MORE -->
