@@ -814,9 +814,9 @@ async function loadReferrals() {
             console.error(data.error);
             return;
         }
-
-        document.getElementById("referralLink").value =
-            data.referral_link;
+          
+        document.getElementById("referralLinkInput"
+      ).value = data.referral_link;
 
         referralsEl.textContent =
             "Friends: " + data.referrals;
@@ -882,28 +882,26 @@ async function tapMine(){
 
         /* Battery immediately decreases */
 
-        batteryEl.textContent =
-            Number(
-                data.battery
-            ).toLocaleString();
+batteryEl.textContent =
+    Number(data.battery).toLocaleString();
 
+/* Balance updates immediately */
 
-        /* Coin is pending for 3 seconds */
+balanceEl.textContent =
+    Number(data.balance).toLocaleString();
 
-        processingEl.textContent =
-            Number(
-                data.pending || 0
-            );
+/* Coin is pending */
 
+processingEl.textContent =
+    Number(data.pending || 0);
 
-        setTimeout(
-            async function(){
+setTimeout(async function () {
 
-                await loadAccount();
+    processingEl.textContent = "0";
 
-            },
-            300
-        );
+    await loadAccount();
+
+}, 300);
 
     }
 
