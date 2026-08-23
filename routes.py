@@ -479,7 +479,7 @@ def get_referrals():
                 first_name
             FROM users
             WHERE referred_by = ?
-            ORDER BY id DESC
+            ORDER BY telegram_id DESC
             """,
             (telegram_id,)
         ).fetchall()
