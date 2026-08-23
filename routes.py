@@ -425,3 +425,93 @@ def tap():
     finally:
 
         conn.close()
+# ==========================================
+# REFERRALS
+# ==========================================
+
+@routes.post("/api/referrals")
+def get_referrals():
+
+    body = request.get_json(silent=True) or {}
+
+    telegram_user = verify_telegram_init_data(
+        body.get("initData", "")
+    )
+
+    if telegram_user is None:
+        return jsonify({
+            "success": False,
+            "error": "Invalid Telegram session"
+        }), 401
+
+    telegram_id = int(telegram_user["id"])
+
+    conn = get_connection()
+
+    try:
+
+        user = conn.execute(
+            """
+            SELECT telegram_id,
+                   referrals,
+                   balance
+            FROM users
+            WHERE telegram_id = ?
+            """,
+            (telegram_id,)
+        ).fetchone()
+
+        if user is None:
+            return jsonify({
+                "success": False,
+                "error": "User not found"
+            }), 404
+
+        referral_link = (
+            f"https://t.me/SHARM_24_Bot?start={telegram_id}"
+        )
+
+        referred_users = conn.execute(
+            """
+            SELECT
+                telegram_id,
+                username,
+                first_name
+            FROM users
+            WHERE referred_by = ?
+            ORDER BY id DESC
+            """,
+            (telegram_id,)
+        ).fetchall()
+
+        friends = []
+
+        for row in referred_users:
+
+            friends.append({
+                "telegram_id": row["telegram_id"],
+                "username": row["username"],
+                "first_name": row["first_name"]
+            })
+
+        return jsonify({
+            "success": True,
+            "referral_link": referral_link,
+            "referrals": int(user["referrals"] or 0),
+            "friends": friends
+        })
+
+    except Exception as error:
+
+        conn.rollback()
+
+        print("referrals error:", error)
+
+        return jsonify({
+            "success": False,
+            "error": "Database error"
+        }), 500
+
+    finally:
+
+        conn.close()
