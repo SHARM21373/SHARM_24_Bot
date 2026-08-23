@@ -515,3 +515,58 @@ def get_referrals():
     finally:
 
         conn.close()
+# ==========================================
+# LEADERBOARD
+# ==========================================
+
+@routes.get("/api/leaderboard")
+def leaderboard():
+
+    conn = get_connection()
+
+    try:
+
+        users = conn.execute("""
+            SELECT
+                telegram_id,
+                username,
+                first_name,
+                balance
+            FROM users
+            ORDER BY balance DESC
+            LIMIT 100
+        """).fetchall()
+
+        leaders = []
+
+        rank = 1
+
+        for row in users:
+
+            leaders.append({
+                "rank": rank,
+                "telegram_id": row["telegram_id"],
+                "username": row["username"],
+                "first_name": row["first_name"],
+                "balance": int(row["balance"] or 0)
+            })
+
+            rank += 1
+
+        return jsonify({
+            "success": True,
+            "leaders": leaders
+        })
+
+    except Exception as error:
+
+        print("leaderboard error:", error)
+
+        return jsonify({
+            "success": False,
+            "error": "Database error"
+        }), 500
+
+    finally:
+
+        conn.close()
