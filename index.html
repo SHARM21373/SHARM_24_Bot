@@ -831,6 +831,45 @@ async function loadReferrals() {
     }
 
 }
+/* LEADERBOARD */
+
+async function loadLeaderboard() {
+
+    try {
+
+        const response = await fetch(
+            API_URL + "/api/leaderboard"
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+            return;
+        }
+
+        const list = document.getElementById("leaderboardList");
+
+        list.innerHTML = "";
+
+        data.leaders.forEach(function(user){
+
+            list.innerHTML += `
+                <li>
+                    <strong>#${user.rank}</strong>
+                    ${user.name}
+                    — ${Number(user.balance).toLocaleString()} SHARM
+                </li>
+            `;
+
+        });
+
+    } catch(error){
+
+        console.error("Leaderboard error:", error);
+
+    }
+
+}
 
 /* TAP */
 
@@ -1024,6 +1063,9 @@ setInterval(
 
 loadAccount();
 loadReferrals();
+loadLeaderboard();
+
+</script>
 
 </script>
 
