@@ -1,78 +1,46 @@
-document.addEventListener("DOMContentLoaded", async function () {
-    const tg = window.Telegram?.WebApp;
-    const telegramUser = tg?.initDataUnsafe?.user;
-    
-    const telegramId = telegramUser?.id || "8746453103"; 
-    const username = telegramUser?.username || "";
-    const firstName = telegramUser?.first_name || "";
+const API_URL = "https://sharm-backend.onrender.com";
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const referralId = urlParams.get('tgWebAppStartParam') || null;
+const tg = window.Telegram.WebApp;
 
-    const scoreDisplay = document.getElementById("score");
-    const tapBtn = document.getElementById("tapBtn");
-    
-    let score = 0;
+tg.ready();
+tg.expand();
 
-    async function loadUserData() {
-        try {
-            const response = await fetch('/api/auth/telegram', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    telegramId: telegramId,
-                    username: username,
-                    firstName: firstName,
-                    referralId: referralId
-                })
-            });
-            const data = await response.json();
-            
-            if (data.success && data.user) {
-                score = Number(data.user.balance);
-                updateScoreDisplay();
-            }
-        } catch (error) {
-            console.error("Failed to load user data from database:", error);
-            score = Number(localStorage.getItem("sharmBalance")) || 0;
-            updateScoreDisplay();
-        }
+const initData = tg.initData;
+const user = tg.initDataUnsafe?.user || {};
+
+let referrerId = null;
+
+const startParam = tg.initDataUnsafe?.start_param;
+
+if (startParam) {
+    const parsed = parseInt(startParam, 10);
+
+    if (!isNaN(parsed) && parsed > 0) {
+        referrerId = parsed;
     }
+}
 
-    function updateScoreDisplay() {
-        if (scoreDisplay) {
-            scoreDisplay.textContent = score.toLocaleString();
-        }
-    }
+const balanceEl = document.getElementById("balance");
+const batteryEl = document.getElementById("battery");
+const processingEl = document.getElementById("processing");
 
-    async function sendTapToDatabase(count) {
-        try {
-            const response = await fetch('/api/tap', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    telegramId: telegramId,
-                    tapCount: count
-                })
-            });
-            const data = await response.json();
-            if (data.success) {
-                score = Number(data.currentBalance);
-                localStorage.setItem("sharmBalance", score);
-                updateScoreDisplay();
-            }
-        } catch (error) {
-            console.error("Failed to save tap score to database:", error);
-        }
-    }
+const usernameEl = document.getElementById("username");
+const accountIdEl = document.getElementById("accountId");
 
-    if (tapBtn) {
-        tapBtn.addEventListener("click", function () {
-            score += 1; 
-            updateScoreDisplay();
-            sendTapToDatabase(1);
-        });
-    }
+const referralsEl = document.getElementById("referrals");
+const tapButton = document.getElementById("tapButton");
 
-    await loadUserData();
-});
+const referralLinkInput =
+    document.getElementById("referralLinkInput");
+
+const friendsList =
+    document.getElementById("friendsList");
+
+if (user.id) {
+
+    usernameEl.textContent =
+        "👤 " + (user.username ? "@" + user.username : user.first_name);
+
+    accountIdEl.textContent =
+        "Telegram ID: " + user.id;
+}
