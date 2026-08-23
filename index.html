@@ -28,7 +28,7 @@ body {
     user-select: none;
 }
 
-.circle-btn, .tap-btn, [class*="circle"], [class*="tap"] {
+#tapButton.tap-button {
     width: 220px !important;
     height: 220px !important;
     margin: 40px auto !important;
@@ -37,13 +37,25 @@ body {
     justify-content: center !important;
     border-radius: 50% !important; 
     background: radial-gradient(circle, #ffe066 0%, #f5b041 60%, #b7861b 100%) !important; 
-    box-shadow: 0 0 30px rgba(245, 176, 65, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.5) !important; 
+    box-shadow: 0 0 35px rgba(245, 176, 65, 0.7), inset 0 0 20px rgba(255, 255, 255, 0.5) !important; 
     border: 8px double #f4d03f !important; 
     color: #141923 !important; 
     font-weight: bold !important;
+    cursor: pointer;
+    outline: none;
 }
 
-      
+.tap-caption {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    color: #ffd700 !important; 
+    font-weight: bold !important;
+    text-align: center;
+    margin-top: 15px;
+}
+
+
 .app {
     width: 100%;
     max-width: 520px;
