@@ -544,12 +544,11 @@ def leaderboard():
         for row in users:
 
             leaders.append({
-                "rank": rank,
-                "telegram_id": row["telegram_id"],
-                "username": row["username"],
-                "first_name": row["first_name"],
-                "balance": int(row["balance"] or 0)
-            })
+    "rank": rank,
+    "telegram_id": row["telegram_id"],
+    "name": row["username"] or row["first_name"] or "Unknown",
+    "balance": int(row["balance"] or 0)
+})
 
             rank += 1
 
