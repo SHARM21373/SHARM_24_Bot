@@ -334,3 +334,94 @@ def get_me():
 
         conn.close()
 
+# ==========================================
+# TAP
+# ==========================================
+
+@routes.post("/api/tap")
+def tap():
+
+    body = request.get_json(silent=True) or {}
+
+    telegram_user = verify_telegram_init_data(
+        body.get("initData", "")
+    )
+
+    if telegram_user is None:
+        return jsonify({
+            "success": False,
+            "error": "Invalid Telegram session"
+        }), 401
+
+    telegram_id = int(telegram_user["id"])
+
+    conn = get_connection()
+
+    try:
+
+        user = conn.execute(
+            """
+            SELECT *
+            FROM users
+            WHERE telegram_id = ?
+            """,
+            (telegram_id,)
+        ).fetchone()
+
+        if user is None:
+            return jsonify({
+                "success": False,
+                "error": "User not found"
+            }), 404
+
+        battery = int(user["battery"] or 0)
+        tap_power = int(user["tap_power"] or 1)
+
+        if battery < tap_power:
+            return jsonify({
+                "success": False,
+                "error": "Battery empty"
+            })
+
+        new_balance = int(user["balance"]) + tap_power
+        new_battery = battery - tap_power
+
+        conn.execute(
+            """
+            UPDATE users
+            SET
+                balance = ?,
+                battery = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE telegram_id = ?
+            """,
+            (
+                new_balance,
+                new_battery,
+                telegram_id
+            )
+        )
+
+        conn.commit()
+
+        return jsonify({
+            "success": True,
+            "balance": new_balance,
+            "battery": new_battery,
+            "pending": tap_power
+        })
+
+    except Exception as error:
+
+        conn.rollback()
+
+        print("tap error:", error)
+
+        return jsonify({
+            "success": False,
+            "error": "Database error"
+        }), 500
+
+    finally:
+
+        conn.close()
