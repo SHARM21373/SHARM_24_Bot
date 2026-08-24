@@ -1,1073 +1,155 @@
-<!DOCTYPE html>
+r<!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<meta name="theme-color" content="#0b0f19">
-
-<title>SHARM Mining</title>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-<style>
-
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: #070a10 !important; 
-    color: white;
-    font-family: Arial, sans-serif;
-    user-select: none;
-}
-
-#tapButton.tap-button {
-    width: 220px !important;
-    height: 220px !important;
-    margin: 40px auto !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 50% !important; 
-    background: radial-gradient(circle, #ffe066 0%, #f5b041 60%, #b7861b 100%) !important; 
-    box-shadow: 0 0 35px rgba(245, 176, 65, 0.7), inset 0 0 20px rgba(255, 255, 255, 0.5) !important; 
-    border: 8px double #f4d03f !important; 
-    color: #141923 !important; 
-    font-weight: bold !important;
-    cursor: pointer;
-    outline: none;
-}
-
-.tap-caption {
-    background: transparent !important;
-    box-shadow: none !important;
-    border: none !important;
-    color: #ffd700 !important; 
-    font-weight: bold !important;
-    text-align: center;
-    margin-top: 15px;
-}
-
-
-.app {
-    width: 100%;
-    max-width: 520px;
-    min-height: 100vh;
-    margin: auto;
-    padding: 18px 16px 90px;
-}
-
-/* TOP */
-
-.top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.username {
-    font-size: 17px;
-    font-weight: bold;
-}
-
-.account-id {
-    margin-top: 4px;
-    color: #8f99aa;
-    font-size: 11px;
-}
-
-.balance {
-    text-align: right;
-}
-
-.balance-value {
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.balance-name {
-    margin-top: 3px;
-    color: #8f99aa;
-    font-size: 10px;
-}
-
-/* MINE */
-
-.mine {
-    position: relative;
-    height: 430px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.tap-area {
-    text-align: center;
-}
-
-.tap-button {
-    width: 190px;
-    height: 190px;
-
-    border: 8px solid #252d3d;
-    border-radius: 50%;
-
-    background: #5865f2;
-    color: white;
-
-    font-size: 22px;
-    font-weight: bold;
-
-    touch-action: manipulation;
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,.35);
-
-    transition:
-        transform .08s,
-        opacity .2s;
-}
-
-.tap-button:active {
-    transform: scale(.93);
-}
-
-.tap-button.disabled {
-    opacity: .45;
-}
-
-.tap-caption {
-    margin-top: 14px;
-    color: #8f99aa;
-    font-size: 12px;
-}
-
-/* STATUS */
-
-.status {
-    position: absolute;
-    right: 0;
-    bottom: 60px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.status-item {
-    padding: 7px 10px;
-
-    border-radius: 10px;
-
-    background: #151b29;
-    border: 1px solid #252d3d;
-
-    color: #cbd5e1;
-
-    font-size: 12px;
-}
-
-.status-item strong {
-    color: #60a5fa;
-}
-
-/* PAGES */
-
-.page {
-    display: none;
-}
-
-.page.active {
-    display: block;
-}
-
-.simple {
-    padding-top: 40px;
-    text-align: center;
-}
-
-.simple h2 {
-    font-size: 23px;
-}
-
-.simple p {
-    color: #9ca3af;
-    font-size: 13px;
-}
-
-/* SETTINGS */
-
-.setting {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    margin-top: 10px;
-    padding: 15px;
-
-    border-radius: 14px;
-
-    background: #151b29;
-    border: 1px solid #252d3d;
-
-    text-align: left;
-}
-
-.setting-icon {
-    font-size: 24px;
-}
-
-.setting-title {
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.setting-sub {
-    margin-top: 4px;
-    color: #8f99aa;
-    font-size: 11px;
-}
-
-/* NAV */
-
-.bottom-nav {
-    position: fixed;
-
-    left: 50%;
-    bottom: 0;
-
-    transform: translateX(-50%);
-
-    width: 100%;
-    max-width: 520px;
-
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-
-    padding: 9px 6px 11px;
-
-    background: #111722;
-    border-top: 1px solid #252d3d;
-
-    z-index: 50;
-}
-
-.nav {
-    border: 0;
-    background: transparent;
-    color: #788397;
-
-    padding: 5px 2px;
-}
-
-.nav.active {
-    color: white;
-}
-
-.nav-icon {
-    display: block;
-    font-size: 21px;
-}
-
-.nav-text {
-    display: block;
-    margin-top: 4px;
-    font-size: 10px;
-}
-
-/* SMALL SCREEN */
-
-@media(max-width:360px) {
-
-    .tap-button {
-        width: 165px;
-        height: 165px;
-        font-size: 19px;
-    }
-
-    .mine {
-        height: 390px;
-    }
-
-    .balance-value {
-        font-size: 19px;
-    }
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SHARM Token Official</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: flex; }
+    </style>
 </head>
+<body class="bg-slate-950 text-white font-sans flex flex-col items-center justify-between h-screen p-4 select-none">
 
-<body>
-
-<div class="app">
-
-<!-- TAP -->
-
-<section id="tapPage" class="page active">
-
-    <div class="top">
-
-        <div>
-            <div id="username"
-                 class="username">
-                👤 Telegram User
-            </div>
-
-            <div id="accountId"
-                 class="account-id">
-                SHARM Mining
-            </div>
+    <!-- Header & Live Balance -->
+    <div class="text-center mt-2 w-full shrink-0">
+        <div class="flex items-center justify-center gap-2">
+            <img id="app-logo" src="https://placehold.co" class="w-10 h-10 rounded-full border-2 border-amber-400" alt="SHARM Logo">
+            <h1 class="text-lg font-black text-amber-400 tracking-wider">SHARM MINING</h1>
         </div>
-
-        <div class="balance">
-
-            <div id="balance"
-                 class="balance-value">
-                0
-            </div>
-
-            <div class="balance-name">
-                SHARM POINTS
-            </div>
-
-        </div>
-
+        <p id="username" class="text-xs text-slate-400 mt-0.5">Miner: Loading...</p>
+        <div class="text-4xl font-black mt-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500" id="balance">0</div>
     </div>
 
-
-    <div class="mine">
-
-        <div class="tap-area">
-
-            <button id="tapButton"
-                    class="tap-button">
-
-                ⛏️ TAP MINE
-
-            </button>
-
-            <div class="tap-caption">
-                +1 SHARM Point
-            </div>
-
-        </div>
-
-
-        <div class="status">
-
-            <div class="status-item">
-                🔋 Battery:
-                <strong id="battery">
-                    1500
-                </strong>
-                / 1500
-            </div>
-
-            <div class="status-item">
-                ⏳ Processing:
-                <strong id="processing">
-                    0
-                </strong>
-            </div>
-
-        </div>
-
+    <!-- ================= TAB 1: MAIN MINING SCREEN ================= -->
+    <div id="tab-mining" class="tab-content active flex-col items-center justify-center my-auto">
+        <button id="mining-btn" class="w-52 h-52 bg-gradient-to-b from-amber-400 to-orange-600 rounded-full shadow-2xl shadow-orange-500/20 flex justify-center items-center active:scale-95 transition-all duration-100 cursor-pointer border-8 border-slate-900 outline-4 outline-amber-400">
+            <span class="text-6xl">⛏️</span>
+        </button>
     </div>
 
-</section>
-
-
-<!-- REFER -->
-<section id="referPage" class="page">
-    <div class="simple">
-        <h2>👥 Referral</h2>
+    <!-- ================= TAB 2: TASKS, DAILY REWARD & AIRDROP ================= -->
+    <div id="tab-tasks" class="tab-content flex-col items-center w-full max-w-sm overflow-y-auto my-auto max-h-[60vh] gap-4 p-2">
         
-        <!-- Total friends count will update here -->
-        <p id="referrals">Friends: 0</p>
+        <!-- Daily Reward Section -->
+        <div class="w-full flex flex-col gap-2">
+            <h2 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">📅 Daily Bonus</h2>
+            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">📆</span>
+                    <div>
+                        <p class="text-xs font-bold">Daily Check-In</p>
+                        <p class="text-[10px] text-amber-400">+10,000 SHARM</p>
+                    </div>
+                </div>
+                <button id="daily-btn" onclick="claimDailyReward()" class="bg-amber-500 text-slate-950 text-[11px] font-bold px-3 py-1.5 rounded-lg active:scale-95 cursor-pointer">Claim</button>
+            </div>
+        </div>
 
-        <!-- Referral Link Display and Action Buttons -->
-        <div class="referral-container" style="margin: 20px 0;">
-            <input type="text" id="referralLinkInput" readonly value="Loading link..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; background: #111; color: #fff; text-align: center; font-size: 14px; box-sizing: border-box;">
+        <!-- Social Tasks Section -->
+        <div class="w-full flex flex-col gap-2.5">
+            <h2 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">📱 Social Tasks</h2>
             
-            <div class="referral-buttons" style="margin-top: 15px; display: flex; gap: 10px;">
-                <button id="copyLinkBtn" style="padding: 12px; background: #2481cc; color: #fff; border: none; border-radius: 8px; cursor: pointer; flex: 1; font-weight: bold; font-size: 14px;">Copy Link</button>
-                <button id="inviteFriendBtn" style="padding: 12px; background: #28a745; color: #fff; border: none; border-radius: 8px; cursor: pointer; flex: 1; font-weight: bold; font-size: 14px;">Invite Friend</button>
+            <!-- YouTube Task -->
+            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">📺</span>
+                    <div>
+                        <p class="text-xs font-bold">Subscribe YouTube</p>
+                        <p class="text-[10px] text-amber-400">+5,000 SHARM</p>
+                    </div>
+                </div>
+                <button onclick="completeSocialTask('https://youtube.com', 5000, this)" class="bg-amber-500 text-slate-950 text-[11px] font-bold px-3 py-1.5 rounded-lg active:scale-95 cursor-pointer">Start</button>
+            </div>
+
+            <!-- Twitter/X Task -->
+            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">𝕏</span>
+                    <div>
+                        <p class="text-xs font-bold">Follow our Twitter</p>
+                        <p class="text-[10px] text-amber-400">+3,000 SHARM</p>
+                    </div>
+                </div>
+                <button onclick="completeSocialTask('https://twitter.com', 3000, this)" class="bg-amber-500 text-slate-950 text-[11px] font-bold px-3 py-1.5 rounded-lg active:scale-95 cursor-pointer">Start</button>
+            </div>
+
+            <!-- Instagram Task -->
+            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">📸</span>
+                    <div>
+                        <p class="text-xs font-bold">Follow Instagram</p>
+                        <p class="text-[10px] text-amber-400">+4,000 SHARM</p>
+                    </div>
+                </div>
+                <button onclick="completeSocialTask('https://instagram.com', 4000, this)" class="bg-amber-500 text-slate-950 text-[11px] font-bold px-3 py-1.5 rounded-lg active:scale-95 cursor-pointer">Start</button>
+            </div>
+
+            <!-- TikTok Task -->
+            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">🎵</span>
+                    <div>
+                        <p class="text-xs font-bold">Follow TikTok</p>
+                        <p class="text-[10px] text-amber-400">+4,000 SHARM</p>
+                    </div>
+                </div>
+                <button onclick="completeSocialTask('https://tiktok.com', 4000, this)" class="bg-amber-500 text-slate-950 text-[11px] font-bold px-3 py-1.5 rounded-lg active:scale-95 cursor-pointer">Start</button>
             </div>
         </div>
 
-        <!-- This box will hold the list of invited friends -->
-        <div id="friendsList" style="margin-top: 20px; text-align: left; max-height: 200px; overflow-y: auto;">
-            <!-- Friends names will be appended here dynamically -->
-        </div>
-    </div>
-</section>
-
-<!-- LEADERBOARD -->
-<section id="leaderPage" class="page">
-    <div class="simple">
-        <h2>🏆 Leaderboard</h2>
-        
-        <!-- This container will hold the Top 10 Users List -->
-        <div id="leaderboardContainer" style="margin-top: 20px; text-align: left;">
-            <ol id="leaderboardList" style="padding-left: 20px; color: #fff; font-size: 16px; line-height: 2;">
-                <!-- Top users rows will be appended here dynamically -->
-            </ol>
-        </div>
-    </div>
-</section>
-      
-
-
-<!-- MORE -->
-
-<section id="morePage"
-         class="page">
-
-    <div class="simple">
-
-        <h2>⚙️ More</h2>
-
-
-        <div class="setting">
-
-            <div class="setting-icon">👤</div>
-
-            <div>
-                <div class="setting-title">
-                    Account
-                </div>
-
-                <div class="setting-sub">
-                    Telegram account
-                </div>
+        <!-- AirDrop Area -->
+        <div class="w-full bg-gradient-to-r from-amber-500/10 to-orange-500/10 p-4 rounded-xl border border-amber-500/30 flex flex-col items-center text-center gap-1.5">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl animate-pulse">🎁</span>
+                <h3 class="text-sm font-black text-amber-400 tracking-wider uppercase">AirDrop Coming Soon</h3>
             </div>
-
-        </div>
-
-
-        <div class="setting">
-
-            <div class="setting-icon">🔐</div>
-
-            <div>
-                <div class="setting-title">
-                    Telegram Access
-                </div>
-
-                <div class="setting-sub">
-                    Mini App session
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="setting">
-
-            <div class="setting-icon">🎵</div>
-
-            <div>
-                <div class="setting-title">
-                    TikTok
-                </div>
-
-                <div class="setting-sub">
-                    Tasks and rewards
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="setting">
-
-            <div class="setting-icon">▶️</div>
-
-            <div>
-                <div class="setting-title">
-                    YouTube
-                </div>
-
-                <div class="setting-sub">
-                    Tasks and rewards
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="setting">
-
-            <div class="setting-icon">𝕏</div>
-
-            <div>
-                <div class="setting-title">
-                    X
-                </div>
-
-                <div class="setting-sub">
-                    Tasks and rewards
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="setting">
-
-            <div class="setting-icon">🪂</div>
-
-            <div>
-                <div class="setting-title">
-                    Airdrop
-                </div>
-
-                <div class="setting-sub">
-                    Future SHARM allocation
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="setting">
-
-            <div class="setting-icon">🎁</div>
-
-            <div>
-                <div class="setting-title">
-                    Daily Reward
-                </div>
-
-                <div class="setting-sub">
-                    Coming soon
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="setting">
-
-            <div class="setting-icon">❓</div>
-
-            <div>
-                <div class="setting-title">
-                    Support
-                </div>
-
-                <div class="setting-sub">
-                    SHARM Support
-                </div>
-            </div>
-
+            <p class="text-[11px] text-slate-400">Keep mining SHARM tokens! The official token distribution and convert option will be unlocked in the next phase.</p>
+            <span class="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-mono font-bold mt-1">Phase 1: Active Mining</span>
         </div>
 
     </div>
 
-</section>
-
-</div>
-
-
-<!-- NAV -->
-
-<nav class="bottom-nav">
-
-    <button class="nav active"
-            data-page="tapPage">
-
-        <span class="nav-icon">⛏️</span>
-        <span class="nav-text">Tap</span>
-
-    </button>
-
-
-    <button class="nav"
-            data-page="referPage">
-
-        <span class="nav-icon">👥</span>
-        <span class="nav-text">Refer</span>
-
-    </button>
-
-
-    <button class="nav"
-            data-page="leaderPage">
-
-        <span class="nav-icon">🏆</span>
-        <span class="nav-text">Leader</span>
-
-    </button>
-
-
-    <button class="nav"
-            data-page="morePage">
-
-        <span class="nav-icon">⚙️</span>
-        <span class="nav-text">More</span>
-
-    </button>
-
-</nav>
-
-
-<script>
-
-const API_URL =
-    "https://sharm-backend.onrender.com";
-
-const tg =
-    window.Telegram.WebApp;
-
-tg.ready();
-tg.expand();
-
-
-const initData =
-    tg.initData;
-
-
-const user =
-    tg.initDataUnsafe?.user;
-// ==========================================
-// REFERRAL ID
-// ==========================================
-
-let referrerId = null;
-
-const startParam =
-    tg.initDataUnsafe?.start_param;
-
-if (startParam) {
-
-    const parsed =
-        parseInt(startParam, 10);
-
-    if (
-        Number.isInteger(parsed) &&
-        parsed > 0
-    ) {
-        referrerId = parsed;
-    }
-}
-
-const balanceEl =
-    document.getElementById("balance");
-
-const batteryEl =
-    document.getElementById("battery");
-
-const processingEl =
-    document.getElementById("processing");
-
-const usernameEl =
-    document.getElementById("username");
-
-const accountIdEl =
-    document.getElementById("accountId");
-
-const referralsEl =
-    document.getElementById("referrals");
-
-const tapButton =
-    document.getElementById("tapButton");
-
-
-/* USER */
-
-if(user){
-
-    const name =
-        user.username
-        ? "@" + user.username
-        : user.first_name
-          || "Telegram User";
-
-    usernameEl.textContent =
-        "👤 " + name;
-
-    accountIdEl.textContent =
-        "Telegram ID: " + user.id;
-
-}
-
-
-/* LOAD ACCOUNT */
-
-async function loadAccount(){
-
-    if(!initData){
-
-        usernameEl.textContent =
-            "👤 Open inside Telegram";
-
-        return;
-    }
-
-    try {
-
-    const response =
-        await fetch(
-            API_URL + "/api/me",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    initData: initData,
-                    referrer_id: referrerId
-                })
-            }
-        );
-
-    const data =
-        await response.json();
-
-    if (!data.success) {
-        console.error(data.error);
-        return;
-    }
-
-           balanceEl.textContent =
-            Number(
-                data.balance || 0
-            ).toLocaleString();
-
-
-        batteryEl.textContent =
-            Number(
-                data.battery || 0
-            ).toLocaleString();
-
-
-        referralsEl.textContent =
-            "Friends: " +
-            Number(
-                data.referrals || 0
-            ).toLocaleString();
-        
-      if (data.user){
-
-        const backendUser = data.user;
-        const name =
-        backendUser.username
-        ? "@" + backendUser.username
-        : backendUser.first_name || "Telegram User";
-
-    usernameEl.textContent =
-        "👤 " + name;
-
-    accountIdEl.textContent =
-        "Telegram ID: " +
-        backendUser.telegram_id;
-          }
-    }
-
-    catch(error){
-
-        console.error(
-            "Account error:",
-            error
-        );
-
-    }
-
-}
-/* REFERRALS */
-
-async function loadReferrals() {
-
-    if (!initData) {
-        return;
-    }
-
-    try {
-
-        const response = await fetch(
-            API_URL + "/api/referrals",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    initData: initData
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        if (!data.success) {
-            console.error(data.error);
-            return;
-        }
-          
-        document.getElementById("referralLinkInput"
-      ).value = data.referral_link;
-
-        referralsEl.textContent =
-            "Friends: " + data.referrals;
-
-    } catch (error) {
-
-        console.error(
-            "Referral error:",
-            error
-        );
-
-    }
-
-}
-/* LEADERBOARD */
-
-async function loadLeaderboard() {
-
-    try {
-
-        const response = await fetch(
-            API_URL + "/api/leaderboard"
-        );
-
-        const data = await response.json();
-
-        if (!data.success) {
-            return;
-        }
-
-        const list = document.getElementById("leaderboardList");
-
-        list.innerHTML = "";
-
-        data.leaders.forEach(function(user){
-
-            list.innerHTML += `
-                <li>
-                    <strong>#${user.rank}</strong>
-                    ${user.name}
-                    — ${Number(user.balance).toLocaleString()} SHARM
-                </li>
-            `;
-
-        });
-
-    } catch(error){
-
-        console.error("Leaderboard error:", error);
-
-    }
-
-}
-
-/* TAP */
-
-let tapping = false;
-
-
-async function tapMine(){
-
-    if(tapping){
-        return;
-    }
-
-    tapping = true;
-
-    try{
-
-        const response =
-            await fetch(
-                API_URL + "/api/tap",
-                {
-                    method: "POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        initData: initData
-                    })
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if(!data.success){
-
-            alert(
-                data.error ||
-                "Tap failed"
-            );
-
-            return;
-        }
-
-
-        /* Battery immediately decreases */
-
-batteryEl.textContent =
-    Number(data.battery).toLocaleString();
-
-/* Balance updates immediately */
-
-balanceEl.textContent =
-    Number(data.balance).toLocaleString();
-
-/* Coin is pending */
-
-processingEl.textContent =
-    Number(data.pending || 0);
-
-setTimeout(async function () {
-
-    processingEl.textContent = "0";
-
-    await loadAccount();
-
-}, 300);
-
-    }
-
-    catch(error){
-
-        console.error(
-            "Tap error:",
-            error
-        );
-
-        alert(
-            "Connection error"
-        );
-
-    }
-
-    finally{
-
-        setTimeout(
-            function(){
-
-                tapping = false;
-
-            },
-            250
-        );
-
-    }
-
-}
-
-
-tapButton.addEventListener(
-    "pointerdown",
-    function(event){
-
-        event.preventDefault();
-
-        tapMine();
-
-    },
-    {
-        passive:false
-    }
-);
-
-
-/* NAVIGATION */
-
-const navs =
-    document.querySelectorAll(".nav");
-
-const pages =
-    document.querySelectorAll(".page");
-
-
-navs.forEach(function(nav) {
-
-    nav.addEventListener("click", function() {
-
-        const id =
-            nav.dataset.page;
-
-        const targetPage =
-            document.getElementById(id);
-
-
-        if (!targetPage) {
-
-            console.error(
-                "Page not found:",
-                id
-            );
-
-            return;
-        }
-
-
-        pages.forEach(function(page) {
-
-            page.classList.remove(
-                "active"
-            );
-
-        });
-
-
-        navs.forEach(function(item) {
-
-            item.classList.remove(
-                "active"
-            );
-
-        });
-
-
-        targetPage.classList.add(
-            "active"
-        );
-
-
-        nav.classList.add(
-            "active"
-        );
-
-    });
-
-});
-
-
-/* REFRESH ACCOUNT */
-
-setInterval(
-    loadAccount,
-    5000
-);
-
-
-/* START */
-
-loadAccount();
-loadReferrals();
-loadLeaderboard();
-
-</script>
-
-</script>
-
-</body>
-    </html>
+    <!-- ================= TAB 3: FRIENDS & LEADERBOARD ================= -->
+    <div id="tab-friends" class="tab-content flex-col items-center w-full max-w-sm overflow-y-auto my-auto max-h-[60vh] gap-4 p-2">
+        <!-- Invite Section -->
+        <div class="w-full bg-slate-900 p-4 rounded-xl border border-slate-800 text-center">
+            <p class="text-sm font-bold">Invite Friends & Get Bonus</p>
+            <p class="text-xs text-slate-400 mt-1">Get +10,000 SHARM for each referral</p>
+            <button onclick="inviteFriend()" class="w-full bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-bold py-2 rounded-xl mt-3 active:scale-95 cursor-pointer">👥 Invite a Friend</button>
+        </div>
+
+        <!-- Leaderboard Section -->
+        <div class="w-full">
+            <h3 class="text-sm font-bold text-amber-400 mb-2 flex items-center gap-1">🏆 Top Miners (Leaderboard)</h3>
+            <div id="leaderboard-list" class="w-full bg-slate-900 rounded-xl p-2 border border-slate-800 flex flex-col gap-1.5">
+                <div class="flex justify-between items-center text-xs p-2 bg-slate-950 rounded-lg"><span>🥇 1. Karim Khan</span><span class="text-amber-400 font-bold">1,250,000</span></div>
+                <div class="flex justify-between items-center text-xs p-2 bg-slate-950 rounded-lg"><span>🥈 2. SHARM Boss</span><span class="text-amber-400 font-bold">980,000</span></div>
+                <div class="flex justify-between items-center text-xs p-2 bg-slate-950 rounded-lg"><span>🥉 3. Alex Miner</span><span class="text-amber-400 font-bold">750,000</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TAB 4: WALLET & CONVERT ================= -->
+    <div id="tab-wallet" class="tab-content flex-col items-center w-full max-w-sm my-auto gap-4 p-2">
+        <div class="w-full bg-slate-900 p-5 rounded-xl border border-slate-800 text-center">
+            <span class="text-4xl">💼</span>
+            <h3 class="text-md font-bold mt-2">SHARM Web3 Wallet</h3>
+            <p class="text-xs text-slate-400 mt-1">Convert your SHARM tokens to Bitcoin or Dollar (USDT)</p>
+            
+            <button onclick="tg.showAlert('Wallet Connection Feature is coming soon in Token Launch Event!')" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold py-2.5 rounded-xl mt-4 border border-amber-500/30 active:scale-95 cursor-pointer">🔌 Connect Wallet</button>
+        </div>
+    </div>
+
+    <!-- ================= BOTTOM NAVIGATION BAR ================= -->
+    <div class="w-full max-w-sm bg-slate-900/90 backdrop-blur-md rounded-2xl p-3 flex justify-around shadow-xl border border-slate-800 shrink-0">
+        <button onclick="switchTab('mining')" class="flex flex-col items-center text-amber-400 nav-btn cursor-pointer">
+            <span class="text-xl">⛏️</span><span class="text-[10px] mt-0.5 font-medium">Home</span>
+        </button>
+        <button onclick="switchTab('tasks')" class="flex flex-col items-center text-slate-400 nav-btn cursor-pointer">
+                                                            
