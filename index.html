@@ -6,8 +6,9 @@
     <title>SHARM Token Official</title>
     <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org"></script>
-    <!-- Tailwind CSS -->
+    <!-- Guaranteed Tailwind CSS Stable v3 Link -->
     <script src="https://jsdelivr.net"></script>
+    <script src="https://tailwindcss.com"></script>
     <style>
         .tab-content { display: none; }
         .tab-content.active { display: flex; }
@@ -16,7 +17,7 @@
 <body class="bg-slate-950 text-white font-sans flex flex-col items-center justify-between h-screen p-4 select-none">
 
     <!-- Header & Live Balance -->
-    <div class="text-center mt-2 w-full shrink-0">
+    <div class="text-center mt-2 w-full shrink-0 flex flex-col items-center">
         <div class="flex items-center justify-center gap-2">
             <img id="app-logo" src="https://ibb.co" class="w-10 h-10 rounded-full border-2 border-amber-400 object-cover" alt="SHARM Logo">
             <h1 class="text-lg font-black text-amber-400 tracking-wider">SHARM MINING</h1>
@@ -38,9 +39,9 @@
         <!-- Daily Reward Section -->
         <div class="w-full flex flex-col gap-2">
             <h2 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">📅 Daily Bonus</h2>
-            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
+            <div class="w-full bg-slate-900 p-3 rounded-xl flex justify-between items-center border border-slate-800">
                 <div class="flex items-center gap-3">
-                    <span class="text-xl"><b>专</b></span>
+                    <span class="text-xl">📆</span>
                     <div>
                         <p class="text-xs font-bold">Daily Check-In</p>
                         <p class="text-[10px] text-amber-400">+10,000 SHARM</p>
@@ -55,121 +56,9 @@
             <h2 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">📱 Social Tasks</h2>
             
             <!-- YouTube Task -->
-            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
+            <div class="w-full bg-slate-900 p-3 rounded-xl flex justify-between items-center border border-slate-800">
                 <div class="flex items-center gap-3">
-                    <span class="text-xl"><b>📺</b></span>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHARM Token Official</title>
-    <!-- Telegram WebApp SDK -->
-    <script src="https://telegram.org"></script>
-    <!-- Tailwind CSS -->
-    <script src="https://jsdelivr.net"></script>
-    <style>
-        .tab-content { display: none; }
-        .tab-content.active { display: flex; }
-    </style>
-</head>
-<body class="bg-slate-950 text-white font-sans flex flex-col items-center justify-between h-screen p-4 select-none">
-
-    <!-- Header & Live Balance -->
-    <div class="text-center mt-2 w-full shrink-0">
-        <div class="flex items-center justify-center gap-2">
-            <img id="app-logo" src="https://ibb.co" class="w-10 h-10 rounded-full border-2 border-amber-400 object-cover" alt="SHARM Logo">
-            <h1 class="text-lg font-black text-amber-400 tracking-wider">SHARM MINING</h1>
-        </div>
-        <p id="username" class="text-xs text-slate-400 mt-0.5">Miner: Loading...</p>
-        <div class="text-4xl font-black mt-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500" id="balance">0</div>
-    </div>
-
-    <!-- ================= TAB 1: MAIN MINING SCREEN ================= -->
-    <div id="tab-mining" class="tab-content active flex-col items-center justify-center my-auto">
-        <button id="mining-btn" class="w-52 h-52 bg-gradient-to-b from-amber-400 to-orange-600 rounded-full shadow-2xl shadow-orange-500/20 flex justify-center items-center active:scale-95 transition-all duration-100 cursor-pointer border-8 border-slate-900 outline-4 outline-amber-400 overflow-hidden p-1">
-            <img src="https://ibb.co" class="w-full h-full rounded-full object-cover" alt="SHARM Coin">
-        </button>
-    </div>
-
-    <!-- ================= TAB 2: TASKS, DAILY REWARD & AIRDROP ================= -->
-    <div id="tab-tasks" class="tab-content flex-col items-center w-full max-w-sm overflow-y-auto my-auto max-h-[60vh] gap-4 p-2">
-        
-        <!-- Daily Reward Section -->
-        <div class="w-full flex flex-col gap-2">
-            <h2 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">📅 Daily Bonus</h2>
-            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
-                <div class="flex items-center gap-3">
-                    <span class="text-xl"><b>📆</b></span>
-                    <div>
-                        <p class="text-xs font-bold">Daily Check-In</p>
-                        <p class="text-[10px] text-amber-400">+10,000 SHARM</p>
-                    </div>
-                </div>
-                <button id="daily-btn" onclick="claimDailyReward()" class="bg-amber-500 text-slate-950 text-[11px] font-bold px-3 py-1.5 rounded-lg active:scale-95 cursor-pointer">Claim</button>
-            </div>
-        </div>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHARM Token Official</title>
-    <!-- Telegram WebApp SDK -->
-    <script src="https://telegram.org"></script>
-    <!-- Tailwind CSS -->
-    <script src="https://jsdelivr.net"></script>
-    <style>
-        .tab-content { display: none; }
-        .tab-content.active { display: flex; }
-    </style>
-</head>
-<body class="bg-slate-950 text-white font-sans flex flex-col items-center justify-between h-screen p-4 select-none">
-
-    <!-- Header & Live Balance -->
-    <div class="text-center mt-2 w-full shrink-0">
-        <div class="flex items-center justify-center gap-2">
-            <img id="app-logo" src="https://ibb.co" class="w-10 h-10 rounded-full border-2 border-amber-400 object-cover" alt="SHARM Logo">
-            <h1 class="text-lg font-black text-amber-400 tracking-wider">SHARM MINING</h1>
-        </div>
-        <p id="username" class="text-xs text-slate-400 mt-0.5">Miner: Loading...</p>
-        <div class="text-4xl font-black mt-2 text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500" id="balance">0</div>
-    </div>
-
-    <!-- ================= TAB 1: MAIN MINING SCREEN ================= -->
-    <div id="tab-mining" class="tab-content active flex-col items-center justify-center my-auto">
-        <button id="mining-btn" class="w-52 h-52 bg-gradient-to-b from-amber-400 to-orange-600 rounded-full shadow-2xl shadow-orange-500/20 flex justify-center items-center active:scale-95 transition-all duration-100 cursor-pointer border-8 border-slate-900 outline-4 outline-amber-400 overflow-hidden p-1">
-            <img src="https://ibb.co" class="w-full h-full rounded-full object-cover" alt="SHARM Coin">
-        </button>
-    </div>
-
-    <!-- ================= TAB 2: TASKS, DAILY REWARD & AIRDROP ================= -->
-    <div id="tab-tasks" class="tab-content flex-col items-center w-full max-w-sm overflow-y-auto my-auto max-h-[60vh] gap-4 p-2">
-        
-        <!-- Daily Reward Section -->
-        <div class="w-full flex flex-col gap-2">
-            <h2 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">📅 Daily Bonus</h2>
-            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
-                <div class="flex items-center gap-3">
-                    <span class="text-xl"><b>📆</b></span>
-                    <div>
-                        <p class="text-xs font-bold">Daily Check-In</p>
-                        <p class="text-[10px] text-amber-400">+10,000 SHARM</p>
-                    </div>
-                </div>
-                <button id="daily-btn" onclick="claimDailyReward()" class="bg-amber-500 text-slate-950 text-[11px] font-bold px-3 py-1.5 rounded-lg active:scale-95 cursor-pointer">Claim</button>
-            </div>
-        </div>
-
-        <!-- Social Tasks Section -->
-        <div class="w-full flex flex-col gap-2.5">
-            <h2 class="text-sm font-bold text-amber-400 flex items-center gap-1.5">📱 Social Tasks</h2>
-            
-            <!-- YouTube Task -->
-            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
-                <div class="flex items-center gap-3">
-                    <span class="text-xl"><b>📺</b></span>
+                    <span class="text-xl">📺</span>
                     <div>
                         <p class="text-xs font-bold">Subscribe YouTube</p>
                         <p class="text-[10px] text-amber-400">+5,000 SHARM</p>
@@ -179,9 +68,9 @@
             </div>
 
             <!-- Twitter/X Task -->
-            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
+            <div class="w-full bg-slate-900 p-3 rounded-xl flex justify-between items-center border border-slate-800">
                 <div class="flex items-center gap-3">
-                    <span class="text-xl"><b>𝕏</b></span>
+                    <span class="text-xl">𝕏</span>
                     <div>
                         <p class="text-xs font-bold">Follow our Twitter</p>
                         <p class="text-[10px] text-amber-400">+3,000 SHARM</p>
@@ -191,9 +80,9 @@
             </div>
 
             <!-- TikTok Task -->
-            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
+            <div class="w-full bg-slate-900 p-3 rounded-xl flex justify-between items-center border border-slate-800">
                 <div class="flex items-center gap-3">
-                    <span class="text-xl"><b>🎵</b></span>
+                    <span class="text-xl">🎵</span>
                     <div>
                         <p class="text-xs font-bold">Follow TikTok</p>
                         <p class="text-[10px] text-amber-400">+4,000 SHARM</p>
@@ -203,9 +92,9 @@
             </div>
 
             <!-- Facebook Task -->
-            <div class="w-full bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
+            <div class="w-full bg-slate-900 p-3 rounded-xl flex justify-between items-center border border-slate-800">
                 <div class="flex items-center gap-3">
-                    <span class="text-xl"><b>📘</b></span>
+                    <span class="text-xl">📘</span>
                     <div>
                         <p class="text-xs font-bold">Follow Facebook</p>
                         <p class="text-[10px] text-amber-400">+4,000 SHARM</p>
@@ -216,9 +105,9 @@
         </div>
 
         <!-- AirDrop Announcement Area -->
-        <div class="w-full bg-gradient-to-r from-amber-500/10 to-orange-500/10 p-4 rounded-xl border border-amber-500/30 flex flex-col items-center text-center gap-1.5">
+        <div class="w-full bg-slate-900 p-4 rounded-xl border border-amber-500/30 flex flex-col items-center text-center gap-1.5">
             <div class="flex items-center gap-2">
-                <span class="text-2xl animate-pulse"><b>🎁</b></span>
+                <span class="text-2xl animate-pulse">🎁</span>
                 <h3 class="text-sm font-black text-amber-400 tracking-wider uppercase">AirDrop Coming Soon</h3>
             </div>
             <p class="text-[11px] text-slate-400">Keep mining SHARM tokens! The official token distribution and convert option will be unlocked in the next phase.</p>
@@ -248,15 +137,16 @@
     <!-- ================= TAB 4: WALLET & CONVERT ================= -->
     <div id="tab-wallet" class="tab-content flex-col items-center w-full max-w-sm my-auto gap-4 p-2">
         <div class="w-full bg-slate-900 p-5 rounded-xl border border-slate-800 text-center">
-            <span class="text-4xl"><b>💼</b></span>
+            <span class="text-4xl">💼</span>
             <h3 class="text-md font-bold mt-2">SHARM Web3 Wallet</h3>
             <p class="text-xs text-slate-400 mt-1">Convert your SHARM tokens to Bitcoin or Dollar (USDT)</p>
-            <button onclick="tg.showAlert('Wallet Connection Feature is coming soon in Token Launch Event!')" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold py-2.5 rounded-xl mt-4 border border-amber-500/30 active:scale-95 cursor-pointer">🔌 Connect Wallet</button>
+            <button onclick="tg.showAlert('Wallet Connection Feature is coming soon in Token Launch Event!')" class="w-full bg-slate-800 text-amber-400 font-bold py-2.5 rounded-xl mt-4 border border-amber-500/30 active:scale-95 cursor-pointer">🔌 Connect Wallet</button>
         </div>
     </div>
 
     <!-- ================= BOTTOM NAVIGATION BAR ================= -->
-    <div class="w-full max-w-sm bg-slate-900/90 backdrop-blur-md rounded-2xl p-3 flex justify-around shadow-xl border border-slate-800 shrink-0">
+    <div class="w-full max-w-sm bg-slate-900 rounded-2xl p-3 flex justify-around shadow-xl border border-slate-800 shrink-0">
         <button onclick="switchTab('mining')" class="flex flex-col items-center text-amber-400 nav-btn cursor-pointer">
-            <span class="text-xl"><b>⛏️</b></span><span class="text-[10px] mt-0.5 font-medium">Home</span>
+            <span class="text-xl">⛏️</span><span class="text-[10px] mt-0.5 font-medium">Home</span>
         </button>
+        
