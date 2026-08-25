@@ -11,17 +11,8 @@ from bot import application
 
 app = Flask(__name__)
 
-# Allow requests from your GitHub Pages Mini App
-CORS(
-    app,
-    resources={
-        r"/api/*": {
-            "origins": [
-                "https://sharm21373.github.io"
-            ]
-        }
-    }
-)
+# Allowed all origins and paths to prevent Telegram Mini App CORS blockage
+CORS(app)
 
 # Initialize database
 init_db()
@@ -83,3 +74,4 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=port
     )
+    
