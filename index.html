@@ -150,3 +150,401 @@
             <span class="text-xl">⛏️</span><span class="text-[10px] mt-0.5 font-medium">Home</span>
         </button>
         
+        <button onclick="switchTab('tasks')" class="flex flex-col items-center text-slate-400 nav-btn cursor-pointer">
+            <span class="text-xl">📋</span>
+            <span class="text-[10px] mt-0.5 font-medium">Tasks</span>
+        </button>
+
+        <button onclick="switchTab('friends')" class="flex flex-col items-center text-slate-400 nav-btn cursor-pointer">
+            <span class="text-xl">👥</span>
+            <span class="text-[10px] mt-0.5 font-medium">Friends</span>
+        </button>
+
+        <button onclick="switchTab('wallet')" class="flex flex-col items-center text-slate-400 nav-btn cursor-pointer">
+            <span class="text-xl">💼</span>
+            <span class="text-[10px] mt-0.5 font-medium">Wallet</span>
+        </button>
+
+    </div>
+
+<script>
+
+const tg = window.Telegram.WebApp;
+
+tg.ready();
+tg.expand();
+
+const API_URL = "https://sharm-backend.onrender.com";
+
+const initData = tg.initData || "";
+
+const unsafe = tg.initDataUnsafe || {};
+
+const referrerId = unsafe.start_param || "";
+
+const usernameEl = document.getElementById("username");
+const balanceEl = document.getElementById("balance");
+
+const miningBtn = document.getElementById("mining-btn");
+
+const tabs = document.querySelectorAll(".tab-content");
+
+const navBtns = document.querySelectorAll(".nav-btn");
+
+function switchTab(tab){
+
+    tabs.forEach(function(page){
+
+        page.classList.remove("active");
+
+    });
+
+    document
+    .getElementById("tab-" + tab)
+    .classList.add("active");
+
+    navBtns.forEach(function(btn){
+
+        btn.classList.remove("text-amber-400");
+
+        btn.classList.add("text-slate-400");
+
+    });
+
+    event.currentTarget.classList.remove("text-slate-400");
+
+    event.currentTarget.classList.add("text-amber-400");
+
+}
+    <script>
+"use strict";
+
+/* =========================
+   TELEGRAM WEBAPP
+========================= */
+
+const tg = window.Telegram.WebApp;
+
+tg.ready();
+tg.expand();
+
+/* =========================
+   API
+========================= */
+
+const API_URL = "https://sharm-backend.onrender.com";
+
+/* =========================
+   USER DATA
+========================= */
+
+const initData = tg.initData || "";
+
+const user = tg.initDataUnsafe?.user || {};
+
+const telegramId = user.id || 0;
+
+const referrerId = new URLSearchParams(window.location.search).get("startapp");
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const balanceEl = document.getElementById("balance");
+
+const usernameEl = document.getElementById("username");
+
+const miningBtn = document.getElementById("mining-btn");
+
+const dailyBtn = document.getElementById("daily-btn");
+
+const leaderboardList = document.getElementById("leaderboard-list");
+
+/* =========================
+   TABS
+========================= */
+
+function switchTab(tab){
+
+    document
+        .querySelectorAll(".tab-content")
+        .forEach(function(page){
+
+            page.classList.remove("active");
+
+        });
+
+    document
+        .getElementById("tab-" + tab)
+        .classList.add("active");
+
+        }
+    /* =========================
+   LOAD ACCOUNT
+========================= */
+
+async function loadAccount() {
+
+    if (!initData) {
+        usernameEl.textContent = "Open inside Telegram";
+        return;
+    }
+
+    try {
+
+        const response = await fetch(API_URL + "/api/me", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                initData: initData,
+                referrer_id: referrerId
+            })
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+            console.log(data.error);
+            return;
+        }
+
+        balanceEl.textContent =
+            Number(data.balance || 0).toLocaleString();
+
+        if (data.user) {
+
+            const name =
+                data.user.username
+                ? "@" + data.user.username
+                : data.user.first_name;
+
+            usernameEl.textContent =
+                "👤 " + name;
+        }
+
+    } catch (err) {
+
+        console.log(err);
+
+    }
+
+}
+
+/* =========================
+   TAP
+========================= */
+
+async function tap() {
+
+    if (!initData) return;
+
+    try {
+
+        miningBtn.style.transform = "scale(.92)";
+
+        setTimeout(function () {
+            miningBtn.style.transform = "scale(1)";
+        }, 100);
+
+        const response = await fetch(API_URL + "/api/tap", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                initData: initData
+            })
+
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+            tg.showAlert(data.error || "Tap failed");
+            return;
+        }
+
+        balanceEl.textContent =
+            Number(data.balance).toLocaleString();
+
+    } catch (err) {
+
+        console.log(err);
+
+    }
+
+}
+
+miningBtn.addEventListener("click", tap);
+    /* =========================
+   REFERRALS
+========================= */
+
+async function loadReferrals() {
+
+    if (!initData) return;
+
+    try {
+
+        const response = await fetch(API_URL + "/api/referrals", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                initData: initData
+            })
+
+        });
+
+        const data = await response.json();
+
+        if (!data.success) return;
+
+        const input = document.getElementById("referralLinkInput");
+
+        if (input) {
+            input.value = data.referral_link || "";
+        }
+
+    } catch (err) {
+
+        console.log(err);
+
+    }
+
+}
+
+/* =========================
+   LEADERBOARD
+========================= */
+
+async function loadLeaderboard() {
+
+    try {
+
+        const response = await fetch(API_URL + "/api/leaderboard");
+
+        const data = await response.json();
+
+        if (!data.success) return;
+
+        leaderboardList.innerHTML = "";
+
+        data.leaders.forEach(function(user){
+
+            leaderboardList.innerHTML += `
+            <div class="flex justify-between items-center text-xs p-2 bg-slate-950 rounded-lg">
+                <span>#${user.rank} ${user.name}</span>
+                <span class="text-amber-400 font-bold">
+                    ${Number(user.balance).toLocaleString()}
+                </span>
+            </div>
+            `;
+
+        });
+
+    } catch(err){
+
+        console.log(err);
+
+    }
+
+}
+
+/* =========================
+   INVITE FRIEND
+========================= */
+
+function inviteFriend(){
+
+    if (window.Telegram && tg.openTelegramLink) {
+
+        tg.openTelegramLink(
+            "https://t.me/share/url?url=" +
+            encodeURIComponent(
+                "https://t.me/YOUR_BOT_USERNAME?startapp=" + telegramId
+            )
+        );
+
+    }
+
+}
+
+/* =========================
+   DAILY BONUS
+========================= */
+
+function claimDailyReward(){
+
+    tg.showAlert("Daily Reward feature will be available soon.");
+
+}
+
+/* =========================
+   SOCIAL TASK
+========================= */
+
+function completeSocialTask(url,reward,button){
+
+    window.open(url,"_blank");
+
+    button.disabled = true;
+
+    button.innerText = "Completed";
+
+}
+``
+    ...
+function completeSocialTask(url,reward,button){
+
+    window.open(url,"_blank");
+
+    button.disabled = true;
+
+    button.innerText = "Completed";
+
+}
+
+/* =========================
+   START APP
+========================= */
+
+window.addEventListener("load", async function () {
+
+    await loadAccount();
+
+    await loadReferrals();
+
+    await loadLeaderboard();
+
+});
+
+/* =========================
+   AUTO REFRESH
+========================= */
+
+setInterval(function () {
+
+    loadAccount();
+
+}, 5000);
+
+setInterval(function () {
+
+    loadLeaderboard();
+
+}, 30000);
+
+</script>
+
+</body>
+</html>
